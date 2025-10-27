@@ -1,0 +1,113 @@
+/* inizio reset! */
+
+
+/* RESET CSS UNIVERSALE E MODERNO */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* Include padding e border nelle dimensioni */
+}
+
+* {
+    margin: 0;
+    /* Rimuove tutti i margini predefiniti */
+    padding: 0;
+    /* Rimuove tutto il padding predefinito */
+}
+
+html {
+    line-height: 1.15;
+    /* Line-height coerente cross-browser */
+    -webkit-text-size-adjust: 100%;
+    /* Previene zoom su iOS */
+}
+
+body {
+    line-height: 1.6;
+    /* Leggibilità migliorata */
+}
+
+/* Rimuove stili predefiniti liste */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Link senza sottolineatura predefinita */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Immagini responsive di default */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Input e button ereditano font */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    border: none;
+    background: none;
+}
+
+/* Focus visibile per accessibilità */
+:focus-visible {
+    outline: 2px solid #007acc;
+    outline-offset: 2px;
+}
+
+/* Rimuove animazioni per chi preferisce ridotto movimento */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Normalizza elementi HTML5 moderni */
+dialog {
+    padding: 1em;
+    border: solid;
+}
+
+/* Heading consistency */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Table reset */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Textarea scroll migliorato */
+textarea {
+    resize: vertical;
+}
+ 
+/* fine reset */
+
+
+

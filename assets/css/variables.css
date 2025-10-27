@@ -1,0 +1,34 @@
+:root {
+  /* ========================================
+  IDENTITÀ BLU (I tuoi + ottimizzazioni)
+  ======================================== */
+  --primary: #5465FF;           /* Il TUO blu principale - CTA, link, accents */
+  --primary-hover: #6B7BFF;     /* Hover states (tuo cornflower ottimizzato) */
+  --primary-light: #A9B5FF;     /* Borders, icons subtle */
+  --primary-bg: #E8EBFF;        /* Background sections (sostituisce il tuo cyan troppo chiaro) */
+
+  /* ========================================
+  GRIGI MODERNI (Per testo e UI)
+  ======================================== */
+  /* Scuri - Per testo */
+  --gray-900: #0F172A;          /* Titoli principali, massimo contrasto */
+  --gray-700: #334155;          /* Body text, paragrafi */
+  --gray-500: #64748B;          /* Testo secondario, captions */
+
+  /* Chiari - Per backgrounds e bordi */
+  --gray-300: #CBD5E1;          /* Borders, dividers */
+  --gray-100: #F1F5F9;          /* Backgrounds cards */
+  --gray-50: #F8FAFC;           /* Backgrounds sections */
+
+  /* ========================================
+  BASE (Bianco e nero puri)
+  ======================================== */
+  --white: #FFFFFF;
+  --black: #000000;
+
+  /* ========================================
+  SEMANTICI (Solo se servono form/alert)
+  ======================================== */
+  --success: #10B981;           /* Verde moderno */
+  --error: #EF4444;             /* Rosso moderno */
+}
