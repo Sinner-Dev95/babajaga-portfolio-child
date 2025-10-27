@@ -1,34 +1,67 @@
 :root {
-  /* ========================================
-  IDENTITÀ BLU (I tuoi + ottimizzazioni)
-  ======================================== */
-  --primary: #5465FF;           /* Il TUO blu principale - CTA, link, accents */
-  --primary-hover: #6B7BFF;     /* Hover states (tuo cornflower ottimizzato) */
-  --primary-light: #A9B5FF;     /* Borders, icons subtle */
-  --primary-bg: #E8EBFF;        /* Background sections (sostituisce il tuo cyan troppo chiaro) */
-
-  /* ========================================
-  GRIGI MODERNI (Per testo e UI)
-  ======================================== */
-  /* Scuri - Per testo */
-  --gray-900: #0F172A;          /* Titoli principali, massimo contrasto */
-  --gray-700: #334155;          /* Body text, paragrafi */
-  --gray-500: #64748B;          /* Testo secondario, captions */
-
-  /* Chiari - Per backgrounds e bordi */
-  --gray-300: #CBD5E1;          /* Borders, dividers */
-  --gray-100: #F1F5F9;          /* Backgrounds cards */
-  --gray-50: #F8FAFC;           /* Backgrounds sections */
-
-  /* ========================================
-  BASE (Bianco e nero puri)
-  ======================================== */
-  --white: #FFFFFF;
-  --black: #000000;
-
-  /* ========================================
-  SEMANTICI (Solo se servono form/alert)
-  ======================================== */
-  --success: #10B981;           /* Verde moderno */
-  --error: #EF4444;             /* Rosso moderno */
+    /* ========================================
+       IDENTITÀ: PROFESSIONISTA TECH GIOVANE (30 anni)
+       ======================================== */
+    
+    /* === PALETTE PRIMARIA - Energia controllata === */
+    --primary: #5465FF;           /* Blu competente ma moderno */
+    --primary-hover: #6B7BFF;     /* Più vibrante all'interazione */
+    --primary-light: #A9B5FF;     /* Sfumature soft */
+    --primary-bg: #E8EBFF;        /* Sfondi accoglienti */
+    
+    /* === GRIGI - Professionalità sofisticata === */
+    --gray-900: #0F172A;          /* Testo principale - deciso */
+    --gray-700: #334155;          /* Testo secondario - leggibile */
+    --gray-500: #64748B;          /* Testo terziario - approcciabile */
+    --gray-300: #CBD5E1;          /* Bordi e separatori */
+    --gray-100: #F1F5F9;          /* Sfondi secondari */
+    --gray-50: #F8FAFC;           /* Sfondi primari */
+    
+    /* === BASE === */
+    --white: #FFFFFF;
+    --black: #000000;
+    
+    /* === TOKEN SEMANTICI - Comunicano la tua identità === */
+    --color-energy: var(--primary);           /* Competenza + innovazione */
+    --color-confidence: var(--gray-900);      /* Professionalità solida */
+    --color-approachable: var(--gray-500);    /* Accessibilità giovane */
+    
+    --bg-primary: var(--white);
+    --bg-secondary: var(--gray-50);
+    --bg-accent: var(--primary-bg);
+    
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-700);
+    --text-muted: var(--gray-500);
+    
+    /* === TIPOGRAFIA - Giovane ma professionale === */
+    --font-weight-bold: 700;                  /* Deciso - sicurezza */
+    --font-weight-medium: 500;                /* Moderno - aggiornato */
+    --font-weight-normal: 400;                /* Leggibile - non pesante */
+    
+    /* === SPACING - Ritmo energico ma ordinato === */
+    --space-xs: 0.5rem;      /* 8px - micro spacing */
+    --space-sm: 1rem;        /* 16px - elementi vicini */
+    --space-md: 1.5rem;      /* 24px - gruppi */
+    --space-lg: 2rem;        /* 32px - sezioni */
+    --space-xl: 3rem;        /* 48px - macro spacing */
+    --space-dynamic: clamp(1rem, 2vw, 2rem);  /* Adatta allo schermo */
+    
+    /* === BORDER RADIUS - Moderno ma non estremo === */
+    --radius-sm: 0.375rem;   /* 6px - dettagli, badge */
+    --radius-md: 0.75rem;    /* 12px - card, button */
+    --radius-lg: 1.5rem;     /* 24px - container hero */
+    
+    /* === SHADOWS - Sottili e moderni === */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    
+    /* === TRANSITIONS - Fluidi e naturali === */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 250ms ease-in-out;
+    
+    /* === UTILITY === */
+    --success: #10B981;
+    --error: #EF4444;
 }

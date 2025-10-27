@@ -7,7 +7,7 @@ get_header();
 <section class="hero-section-container">
     <div class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title"><?php echo esc_html__('Sviluppatore web che trasforma idee in siti veloci e funzionali', 'blocksy-portfolio-child'); ?></h1>
+            <h1 class="hero-title"><?php echo esc_html__('Sviluppatore web, trasformo le tue  idee in siti veloci e funzionali', 'blocksy-portfolio-child'); ?></h1>
             <h2 class="hero-payoff"><?php echo esc_html__('WordPress, Elementor, custom code: scelgo gli strumenti giusti per ogni progetto. L\'importante è il risultato: siti che caricano veloce, convertono e non ti fanno impazzire.', 'blocksy-portfolio-child'); ?></h2>
             <div class="hero-button">
                 <a href="<?php echo esc_url(home_url('/portfolio')); ?>">
