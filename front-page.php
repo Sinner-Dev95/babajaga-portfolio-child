@@ -11,14 +11,14 @@ get_header();
             <h2 class="hero-payoff"><?php echo esc_html__('WordPress, Elementor, custom code: scelgo gli strumenti giusti per ogni progetto. L\'importante è il risultato: siti che caricano veloce, convertono e non ti fanno impazzire.', 'blocksy-portfolio-child'); ?></h2>
             <div class="hero-button">
                 <a href="<?php echo esc_url(home_url('/portfolio')); ?>">
-                    <?php echo esc_html__('Scopri di più →', 'blocksy-portfolio-child'); ?>
+                    <?php echo esc_html__('Scopri di più ', 'blocksy-portfolio-child'); ?>
                 </a>
             </div>
         </div>  
      
 <div class="hero-media">
     <?php
-    $hero_image_id = 44;
+    $hero_image_id = 71;
     
     if (wp_attachment_is_image($hero_image_id)) {
         
@@ -64,6 +64,100 @@ get_header();
             
     </div>
 </section>
+
+
+
+<!-- === STORY SECTION (nuova) === -->
+<section class="story-container" aria-labelledby="story-heading">
+    <div class="story">
+        
+        <!-- Avatar Image - WordPress Media Handling -->
+        <div class="story-avatar">
+            <?php
+            $story_image_id = 73; // ID immagine avatar
+            
+            if (wp_attachment_is_image($story_image_id)) {
+                $story_image_data = wp_get_attachment_image_src($story_image_id, 'medium');
+                
+                if ($story_image_data) {
+                    $story_image_url = $story_image_data[0];
+                    $story_image_width = $story_image_data[1];
+                    $story_image_height = $story_image_data[2];
+                    
+                    // Alt text dinamico con fallback
+                    $story_image_alt = get_post_meta($story_image_id, '_wp_attachment_image_alt', true);
+                    if (empty($story_image_alt)) {
+                        $story_image_alt = __('Marco - Sviluppatore Web', 'blocksy-portfolio-child');
+                    }
+                    ?>
+                    
+                    <img 
+                        src="<?php echo esc_url($story_image_url); ?>" 
+                        alt="<?php echo esc_attr($story_image_alt); ?>"
+                        width="<?php echo esc_attr($story_image_width); ?>"
+                        height="<?php echo esc_attr($story_image_height); ?>"
+                        class="story-avatar-image"
+                        loading="lazy" // Non critica, carica dopo
+                        decoding="async"
+                    >
+                    
+                <?php }
+            } else { ?>
+                
+                <!-- Fallback placeholder -->
+                <div class="story-avatar-placeholder">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="7" r="5" stroke-width="2"/>
+                        <path d="M17 22H7c0-3 2.5-5.5 5-5.5s5 2.5 5 5.5z" stroke-width="2"/>
+                    </svg>
+                </div>
+                
+            <?php } ?>
+        </div>
+
+        <section class="news-container">
+            <div class="news">
+                
+            </div>
+        </section>
+        
+        <!-- Story Content -->
+        <div class="story-content">
+            <h2 id="story-heading" class="story-title">
+                <?php echo esc_html__('Da dove nasce Babajaga?', 'blocksy-portfolio-child'); ?>
+            </h2>
+            
+            <div class="story-text">
+                <p class="story-para">
+                    <?php echo esc_html__('Tutto è iniziato con la curiosità di capire come funzionano le cose dietro lo schermo. Da bambino smontavo i giocattoli per vedere i meccanismi interni - oggi faccio lo stesso con i siti web. Babajaga rappresenta questa filosofia: esplorare, comprendere, costruire.', 'blocksy-portfolio-child'); ?>
+                </p>
+                
+                <p class="story-para">
+                    <?php echo esc_html__('Il nome viene da un\'antica leggenda slava che parla di una figura che testa il coraggio e l\'ingegno. Nel mio lavoro, ogni progetto è una sfida da risolvere con creatività e competenza tecnica. Non mi limito a seguire le istruzioni: studio il problema e trovo la soluzione migliore.', 'blocksy-portfolio-child'); ?>
+                </p>
+                
+                <p class="story-para">
+                    <?php echo esc_html__('Oggi continuo a mantenere vivo questo approccio: sempre curioso, sempre in apprendimento, sempre pronto a trasformare idee complesse in soluzioni eleganti e funzionali.', 'blocksy-portfolio-child'); ?>
+                </p>
+            </div>
+            
+            <!-- Signature -->
+           <div class="story-signature">
+    <img 
+        src="<?php echo esc_url('http://babajaga-lab.local/wp-content/uploads/2025/10/Immagine_2025-10-28_103723-removebg-preview.png'); ?>" 
+        alt="<?php echo esc_attr__('Firma digitale di Marco - Sviluppatore Web', 'blocksy-portfolio-child'); ?>"
+        class="signature-image"
+        loading="lazy"
+        decoding="async"
+        width="200"
+        height="80"
+    >
+</div>
+        </div>
+        
+    </div>
+</section>
+
 
 <?php
 get_footer();
