@@ -1,3 +1,9 @@
+/* ============================================================================
+   HOME.CSS - HERO SECTION
+   Versione riorganizzata: Media queries raggruppate per breakpoint
+   ============================================================================ */
+
+/* === BASE STYLES (Mobile First) === */
 
 .hero-section-container {
   /* GRADIENTE TECH - Già perfetto */
@@ -33,11 +39,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  @media (min-width: 376px) {
-    min-height: 80vh;
-    padding: var(--space-xl) var(--space-md);
-  }
 }
 
 .hero-section-container::before {
@@ -63,19 +64,6 @@
   flex-direction: column;
   gap: var(--space-lg);
   align-items: center;
-
-  /* GAP ULTERIORMENTE RIDOTTO SU MOBILE PICCOLI */
-  @media (max-width: 375px) {
-    gap: var(--space-md);
-  }
-
-  /* DESKTOP: Diventa layout orizzontale */
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: var(--space-xl);
-  }
 }
 
 /* === CONTENUTO PRINCIPALE === */
@@ -86,29 +74,12 @@
   gap: var(--space-md);
   align-items: center;
   max-width: 65ch;
-
-  /* MOBILE PICCOLI: Riduci ulteriormente il gap */
-  @media (max-width: 375px) {
-    gap: var(--space-xs);
-  }
-
-  /* DESKTOP: Allineamento a sinistra */
-  @media (min-width: 768px) {
-    text-align: left;
-    align-items: flex-start;
-    flex: 1;
-  }
-
-  /* MOBILE PICCOLO: Spaziamento ridotto */
-  @media (max-width: 480px) {
-    gap: var(--space-sm);
-  }
 }
 
 /* === TITOLO PRINCIPALE - OTTIMIZZATO PER INTER === */
 .hero-title {
   /* TIPOGRAFIA FLUIDA OTTIMIZZATA PER INTER */
-  font-size: clamp(1.875rem, 5vw + 0.5rem, 3.25rem); /* Ridotto per Inter */
+  font-size: clamp(2rem, 5vw + 0.5rem, 4rem); /* Ridotto per Inter */
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.015em; /* Ridotto per Inter */
@@ -116,65 +87,19 @@
   margin-bottom: var(--space-sm);
   max-width: 16ch;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-
-  /* OTTIMIZZAZIONE EXTREMA PER IPHONE 6/MOTOROLA G */
-  @media (max-width: 360px) { /* AGGIUNTO BREAKPOINT 360px PER MOTOROLA G */
-    font-size: clamp(1.25rem, 4vw + 0.5rem, 1.75rem);
-    max-width: 10ch;
-    margin-bottom: var(--space-xs);
-    line-height: 1.05;
-  }
-
-  @media (max-width: 375px) {
-    font-size: clamp(1.375rem, 4vw + 0.5rem, 1.875rem);
-    max-width: 12ch;
-    margin-bottom: var(--space-xs);
-  }
-
-  @media (max-width: 480px) {
-    font-size: clamp(1.625rem, 4vw + 0.5rem, 2.25rem);
-    max-width: 14ch;
-    margin-bottom: var(--space-xs);
-  }
-
-  @media (min-width: 481px) and (max-width: 767px) {
-    font-size: clamp(2rem, 4vw + 0.5rem, 2.75rem);
-  }
 }
 
 /* === SOTTOTITOLO - OTTIMIZZATO PER INTER === */
 .hero-payoff {
   /* TIPOGRAFIA FLUIDA OTTIMIZZATA PER INTER */
   font-size: clamp(1rem, 2.5vw + 0.25rem, 1.375rem); /* Ridotto per Inter */
-  font-weight: 400;
+  font-weight: var(--font-weight-medium);
   line-height: 1.5;
   letter-spacing: -0.008em; /* Ridotto per Inter */
   color: var(--gray-100);
   margin-bottom: var(--space-lg);
   max-width: 50ch;
   opacity: 0.95;
-
-  /* MOTOROLA G SPECIFICO */
-  @media (max-width: 360px) {
-    font-size: clamp(0.8125rem, 2vw + 0.5rem, 0.9375rem);
-    max-width: 26ch;
-    line-height: 1.35;
-    margin-bottom: var(--space-md);
-  }
-
-  @media (max-width: 375px) {
-    font-size: clamp(0.875rem, 2vw + 0.5rem, 1rem);
-    max-width: 28ch;
-    line-height: 1.4;
-    margin-bottom: var(--space-md);
-  }
-
-  @media (max-width: 480px) {
-    font-size: clamp(0.9375rem, 2vw + 0.5rem, 1.125rem);
-    max-width: 35ch;
-    line-height: 1.45;
-    margin-bottom: var(--space-md);
-  }
 }
 
 /* === BOTTONE RESPONSIVE === */
@@ -205,9 +130,81 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
+}
 
-  /* BOTTONE PER MOTOROLA G */
-  @media (max-width: 360px) {
+/* FREECCIA ANIMATA */
+.hero-button a::after {
+  content: '→';
+  transition: transform var(--transition-fast);
+}
+
+.hero-button a:hover::after {
+  transform: translateX(4px);
+}
+
+/* STATI INTERATTIVI */
+.hero-button a:hover {
+  background: transparent;
+  color: var(--white);
+  border-color: var(--white);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.2),
+    0 0 0 4px rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.hero-button a:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 4px;
+}
+
+/* === SEZIONE IMMAGINE === */
+.hero-media {
+  width: 100%;
+  max-width: 500px;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+
+
+/* ============================================================================
+   MEDIA QUERIES - RAGGRUPPATE PER BREAKPOINT
+   ============================================================================ */
+
+/* === BREAKPOINT: 360px - MOTOROLA G / DISPOSITIVI EXTRA PICCOLI === */
+@media (max-width: 360px) {
+  .hero-section-container {
+    padding: var(--space-md) var(--space-xs);
+    min-height: clamp(65vh, 75vh, 80vh);
+  }
+
+  .hero-section {
+    gap: var(--space-md);
+  }
+
+  .hero-content {
+    gap: var(--space-xs);
+  }
+
+  .hero-title {
+    font-size: clamp(1.25rem, 4vw + 0.5rem, 1.75rem);
+    max-width: 10ch;
+    margin-bottom: var(--space-xs);
+    line-height: 1.05;
+  }
+
+  .hero-payoff {
+    font-size: clamp(0.8125rem, 2vw + 0.5rem, 0.9375rem);
+    max-width: 26ch;
+    line-height: 1.35;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-button a {
     padding: 0.625rem 0.875rem;
     font-size: 0.8125rem;
     min-height: 38px;
@@ -215,8 +212,42 @@
     max-width: 220px;
   }
 
-  /* BOTTONE PER MOBILE PICCOLI */
-  @media (max-width: 375px) {
+  .hero-media {
+    max-width: 260px;
+    margin-top: var(--space-xs);
+  }
+
+  .hero-image {
+    border-radius: var(--radius-sm);
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+/* === BREAKPOINT: 375px - IPHONE 6 / MOBILE PICCOLI === */
+@media (max-width: 375px) {
+  .hero-section {
+    gap: var(--space-md);
+  }
+
+  .hero-content {
+    gap: var(--space-xs);
+  }
+
+  .hero-title {
+    font-size: clamp(1.375rem, 4vw + 0.5rem, 1.875rem);
+    max-width: 12ch;
+    margin-bottom: var(--space-xs);
+  }
+
+  .hero-payoff {
+    font-size: clamp(0.875rem, 2vw + 0.5rem, 1rem);
+    max-width: 28ch;
+    line-height: 1.4;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-button a {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
     min-height: 40px;
@@ -224,111 +255,109 @@
     max-width: 250px;
   }
 
-  /* MOBILE: Bottone più compatto */
-  @media (max-width: 480px) {
+  .hero-media {
+    max-width: 280px;
+    margin-top: var(--space-sm);
+  }
+
+  .hero-image {
+    border-radius: var(--radius-md);
+    max-width: 260px;
+    margin: 0 auto;
+  }
+}
+
+/* === BREAKPOINT: 376px - SOPRA IPHONE 6 === */
+@media (min-width: 376px) {
+  .hero-section-container {
+    min-height: 80vh;
+    padding: var(--space-xl) var(--space-md);
+  }
+}
+
+@media (min-width: 376px) and (max-width: 767px) {
+  .hero-media {
+    max-width: 320px;
+  }
+
+  .hero-image {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+/* === BREAKPOINT: 480px - MOBILE PICCOLO GENERICO === */
+@media (max-width: 480px) {
+  .hero-content {
+    gap: var(--space-sm);
+  }
+
+  .hero-title {
+    font-size: clamp(1.625rem, 4vw + 0.5rem, 2.25rem);
+    max-width: 14ch;
+    margin-bottom: var(--space-xs);
+  }
+
+  .hero-payoff {
+    font-size: clamp(0.9375rem, 2vw + 0.5rem, 1.125rem);
+    max-width: 35ch;
+    line-height: 1.45;
+    margin-bottom: var(--space-md);
+  }
+
+  .hero-button a {
     padding: 0.75rem 1.25rem;
     width: 100%;
     max-width: 280px;
   }
 
-  /* FREECCIA ANIMATA */
-  &::after {
-    content: '→';
-    transition: transform var(--transition-fast);
-  }
-
-  &:hover::after {
-    transform: translateX(4px);
-  }
-
-  /* STATI INTERATTIVI */
-  &:hover {
-    background: transparent;
-    color: var(--white);
-    border-color: var(--white);
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.2),
-      0 0 0 4px rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--white);
-    outline-offset: 4px;
+  .hero-image {
+    border-radius: var(--radius-md);
+    max-width: 300px;
   }
 }
 
-/* === SEZIONE IMMAGINE === */
-.hero-media {
-  width: 100%;
-  max-width: 500px;
-
-  /* MOTOROLA G: Immagine ancora più compatta */
-  @media (max-width: 360px) {
-    max-width: 260px;
-    margin-top: var(--space-xs);
+/* === BREAKPOINT: 481px-767px - TABLET === */
+@media (min-width: 481px) and (max-width: 767px) {
+  .hero-title {
+    font-size: clamp(2rem, 4vw + 0.5rem, 2.75rem);
   }
 
-  /* MOBILE PICCOLI: Immagine più compatta */
-  @media (max-width: 375px) {
-    max-width: 280px;
-    margin-top: var(--space-sm);
-  }
-
-  @media (min-width: 376px) and (max-width: 767px) {
-    max-width: 320px;
-  }
-
-  /* DESKTOP: Dimensione fissa a destra */
-  @media (min-width: 768px) {
-    flex: 0 0 45%;
-    max-width: 600px;
-  }
-
-  /* TABLET: Margini ottimizzati */
-  @media (min-width: 481px) and (max-width: 767px) {
+  .hero-media {
     max-width: 380px;
   }
 }
 
-.hero-image {
-  width: 100%;
-  height: auto;
-  border-radius: var(--radius-lg);
-
-  /* MOTOROLA G: Dimensione ultra-compatta */
-  @media (max-width: 360px) {
-    border-radius: var(--radius-sm);
-    max-width: 240px;
-    margin: 0 auto;
-  } 
-
-  /* MOBILE PICCOLI: Bordo più stretto e dimensione controllata */
-  @media (max-width: 375px) {
-    border-radius: var(--radius-md);
-    max-width: 260px;
-    margin: 0 auto;
-  }
-
-  @media (min-width: 376px) and (max-width: 767px) {
-    max-width: 300px;
-    margin: 0 auto;
-  }
-
-  /* MOBILE: Centratura e limite */
-  @media (max-width: 767px) {
+/* === BREAKPOINT: 767px - SOTTO TABLET === */
+@media (max-width: 767px) {
+  .hero-image {
     max-width: 350px;
     margin: 0 auto;
   }
+}
 
-  /* MOBILE PICCOLO: Bordo più stretto */
-  @media (max-width: 480px) {
-    border-radius: var(--radius-md);
-    max-width: 300px;
+/* === BREAKPOINT: 768px - DESKTOP === */
+@media (min-width: 768px) {
+  .hero-section {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .hero-content {
+    text-align: left;
+    align-items: flex-start;
+    flex: 1;
+  }
+
+  .hero-media {
+    flex: 0 0 45%;
+    max-width: 600px;
   }
 }
 
-/* === FALLBACK PER DISPOSITIVI MOLTO PICCOLI === */
+/* === FALLBACK: ALTEZZA RIDOTTA + LARGHEZZA PICCOLA === */
 @media (max-height: 600px) and (max-width: 375px) {
   .hero-section-container {
     min-height: auto;
@@ -337,17 +366,5 @@
   
   .hero-section {
     gap: var(--space-sm);
-  }
-}
-
-/* FALLBACK SPECIFICO PER MOTOROLA G E DISPOSITIVI 360px */
-@media (max-width: 360px) {
-  .hero-section-container {
-    padding: var(--space-md) var(--space-xs);
-    min-height: clamp(65vh, 75vh, 80vh);
-  }
-  
-  .hero-content {
-    gap: var(--space-xs);
   }
 }

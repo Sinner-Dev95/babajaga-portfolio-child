@@ -204,7 +204,7 @@
 /* ======================= */
 @media (min-width: 768px) {
     .story-title {
-        font-size: clamp(2rem, 3.5vw, 3rem); /* Più impact su desktop */
+        font-size: clamp(1.875rem, 3.25vw, 2.75rem); /* Più impact su desktop */
         margin-bottom: var(--space-lg);
     }
     

@@ -6,132 +6,318 @@
  * @version 1.0.0
  */
 
-// Sicurezza: previene accesso diretto
+// =========================================================================
+// SICUREZZA - PREVENZIONE ACCESSO DIRETTO
+// =========================================================================
+
 if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * =========================================================================
- * CARICAMENTO ASSETS (CSS & JS) - VERSIONE SICURA
- * =========================================================================
- */
+// =========================================================================
+// 1. CARICAMENTO ASSETS (CSS & JS)
+// =========================================================================
 
 /**
  * Carica gli stili CSS del tema child
+ * Ordine: reset -> variables -> components
  */
 function blocksy_portfolio_child_enqueue_styles() {
-    // Verifica siamo in ambiente WordPress
     if (!function_exists('wp_enqueue_style')) {
         return;
     }
 
-    // 1. RESET CSS - Fondamentale, prima di tutto
-    wp_enqueue_style(
-        'blocksy-child-reset',
-        esc_url( get_stylesheet_directory_uri() . '/assets/css/reset.css' ),
-        array(), // Nessuna dipendenza
-        sanitize_text_field( wp_get_theme()->get('Version') )
-    );
+    $theme_version = wp_get_theme()->get('Version');
     
-    // 2. VARIABLES CSS - Design system foundation
-    wp_enqueue_style(
-        'blocksy-child-variables',
-        esc_url( get_stylesheet_directory_uri() . '/assets/css/variables.css' ),
-        array('blocksy-child-reset'), // Dipende dal reset
-        sanitize_text_field( wp_get_theme()->get('Version') )
-    );
-    
-    // 3. HOME CSS - Stili specifici homepage
-    wp_enqueue_style(
-        'blocksy-child-home',
-        esc_url( get_stylesheet_directory_uri() . '/assets/css/home.css' ), 
-        array('blocksy-child-variables'), // Dipende dalle variables
-        sanitize_text_field( wp_get_theme()->get('Version') )
-    );
+    // CSS Base del tema
+    $css_assets = [
+        'reset' => '/assets/css/reset.css',
+        'variables' => '/assets/css/variables.css',
+        'home' => '/assets/css/home.css'
+    ];
 
-    // 4. COMPONENTI CSS - Stili modulari
-    wp_enqueue_style(
-        'blocksy-child-components',
-        esc_url( get_stylesheet_directory_uri() . '/assets/css/components/hero.css' ),
-        array('blocksy-child-variables'), // Dipende dalle variables
-        sanitize_text_field( wp_get_theme()->get('Version') )
-    );
+    // CSS Components del tema
+    $component_css = [
+        'hero' => '/assets/css/components/hero.css',
+        'story' => '/assets/css/components/story.css',
+        'news' => '/assets/css/components/news.css'
+    ];
+
+    // Merge degli array CSS
+    $all_css_assets = array_merge($css_assets, $component_css);
+
+    // Dipendenze CSS
+    $dependencies = [
+        'reset' => [],
+        'variables' => ['blocksy-child-reset'],
+        'home' => ['blocksy-child-variables'],
+        'hero' => ['blocksy-child-variables'],
+        'story' => ['blocksy-child-variables'], 
+        'news' => ['blocksy-child-variables']
+    ];
+
+    // Caricamento CSS base e components
+    foreach ($all_css_assets as $handle => $path) {
+        $file_path = get_stylesheet_directory() . $path;
+        
+        if (!file_exists($file_path)) {
+            error_log("Blocksy Child: File {$path} non trovato");
+            continue;
+        }
+
+        wp_enqueue_style(
+            "blocksy-child-{$handle}",
+            esc_url(get_stylesheet_directory_uri() . $path),
+            $dependencies[$handle],
+            $theme_version
+        );
+    }
+    
+    // CSS condizionale per archivio news
+    if (is_post_type_archive('news')) {
+        $archive_news_css = '/assets/css/archive-news.css';
+        $archive_news_path = get_stylesheet_directory() . $archive_news_css;
+
+        if (file_exists($archive_news_path)) {
+            wp_enqueue_style(
+                'blocksy-child-archive-news',
+                esc_url(get_stylesheet_directory_uri() . $archive_news_css),
+                array('blocksy-child-variables'),
+                $theme_version
+            );
+        }
+    }
 }
 add_action('wp_enqueue_scripts', 'blocksy_portfolio_child_enqueue_styles', 15);
 
 /**
- * Carica gli script JavaScript
+ * Carica Swiper su homepage E archivio news
+ * Priorità: 17 (dopo CSS base)
+ */
+function blocksy_child_enqueue_swiper() {
+    // Carica solo dove serve: homepage e archivio news
+    if (!is_front_page() && !is_post_type_archive('news')) {
+        return;
+    }
+
+    if (!function_exists('wp_enqueue_style') || !function_exists('wp_enqueue_script')) {
+        return;
+    }
+
+    $swiper_version = '10.3.1';
+    
+    // CSS Swiper bundle (include navigation e pagination)
+    wp_enqueue_style(
+        'swiper-css',
+        'https://cdn.jsdelivr.net/npm/swiper@' . $swiper_version . '/swiper-bundle.min.css',
+        array('blocksy-child-variables'),
+        $swiper_version
+    );
+    
+    // JS Swiper caricato nel footer
+    wp_enqueue_script(
+        'swiper-js',
+        'https://cdn.jsdelivr.net/npm/swiper@' . $swiper_version . '/swiper-bundle.min.js',
+        array('jquery'),
+        $swiper_version,
+        true
+    );
+}
+add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_swiper', 17);
+
+/**
+ * Carica script JavaScript principale del tema
+ * Priorità: 20 (dopo Swiper)
  */
 function blocksy_portfolio_child_enqueue_scripts() {
-    // Verifica siamo in ambiente WordPress
     if (!function_exists('wp_enqueue_script')) {
         return;
     }
 
-    wp_enqueue_script(
-        'blocksy-child-main',
-        esc_url( get_stylesheet_directory_uri() . '/assets/js/main.js' ),
-        array('jquery'), // Dipende da jQuery
-        sanitize_text_field( wp_get_theme()->get('Version') ),
-        true // Carica nel footer
-    );
+    $js_file = '/assets/js/main.js';
+    $js_path = get_stylesheet_directory() . $js_file;
 
-    // Aggiungi nonce per sicurezza AJAX (se usi AJAX in futuro)
-    // wp_localize_script('blocksy-child-main', 'blocksy_child_ajax', array(
-    //     'nonce' => wp_create_nonce('blocksy_child_nonce'),
-    //     'ajaxurl' => admin_url('admin-ajax.php')
-    // ));
+    if (file_exists($js_path)) {
+        wp_enqueue_script(
+            'blocksy-child-main',
+            esc_url(get_stylesheet_directory_uri() . $js_file),
+            ['jquery'], // Dipendenze: jQuery
+            wp_get_theme()->get('Version'),
+            true
+        );
+    } else {
+        error_log("Blocksy Child: File {$js_file} non trovato");
+    }
 }
 add_action('wp_enqueue_scripts', 'blocksy_portfolio_child_enqueue_scripts', 20);
 
 /**
- * =========================================================================
- * SICUREZZA AGGIUNTIVA - FEATURES FUTURE
- * =========================================================================
+ * Carica script specifico per slider news
+ * Priorità: 25 (dopo main.js)
  */
+function blocksy_portfolio_child_enqueue_news_scripts() {
+    if (!is_post_type_archive('news')) {
+        return;
+    }
+
+    if (!function_exists('wp_enqueue_script')) {
+        return;
+    }
+
+    $js_file = '/assets/js/news-slider.js';
+    $js_path = get_stylesheet_directory() . $js_file;
+
+    if (file_exists($js_path)) {
+        wp_enqueue_script(
+            'blocksy-child-news-slider',
+            esc_url(get_stylesheet_directory_uri() . $js_file),
+            ['jquery', 'swiper-js'],
+            wp_get_theme()->get('Version'),
+            true
+        );
+    }
+}
+add_action('wp_enqueue_scripts', 'blocksy_portfolio_child_enqueue_news_scripts', 25);
+
+// =========================================================================
+// 2. CUSTOM POST TYPES
+// =========================================================================
 
 /**
- * Esempio: Funzione AJAX sicura per features future
+ * Custom Post Type: News
+ * Utilizzato per l'archivio con slider
+ */
+function blocksy_portfolio_child_register_news() {
+    $labels = array(
+        'name' => 'News',
+        'singular_name' => 'News',
+        'menu_name' => 'News',
+        'add_new' => 'Aggiungi News',
+        'add_new_item' => 'Aggiungi Nuova News',
+        'edit_item' => 'Modifica News',
+        'all_items' => 'Tutte le News',
+        'view_item' => 'Visualizza News',
+        'search_items' => 'Cerca News',
+        'not_found' => 'Nessuna news trovata',
+        'not_found_in_trash' => 'Nessuna news nel cestino'
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'publicly_queryable' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_admin_bar' => true,
+        'menu_position' => 6,
+        'menu_icon' => 'dashicons-media-document',
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'has_archive' => true,
+        'show_in_rest' => true,
+        'can_export' => true,
+        'capability_type' => 'post',
+        'rewrite' => array('slug' => 'news')
+    );
+    
+    register_post_type('news', $args);
+}
+add_action('init', 'blocksy_portfolio_child_register_news');
+
+/**
+ * Custom Post Type: Progetti Portfolio
+ * Preparato per sviluppi futuri
+ */
+function blocksy_portfolio_child_register_projects() {
+    $labels = array(
+        'name' => 'Progetti',
+        'singular_name' => 'Progetto',
+        'menu_name' => 'Progetti',
+        'add_new' => 'Aggiungi Progetto',
+        'add_new_item' => 'Aggiungi Nuovo Progetto',
+        'edit_item' => 'Modifica Progetto',
+        'all_items' => 'Tutti i Progetti',
+        'view_item' => 'Visualizza Progetto',
+        'search_items' => 'Cerca Progetti',
+        'not_found' => 'Nessun progetto trovato',
+        'not_found_in_trash' => 'Nessun progetto nel cestino'
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'publicly_queryable' => true,
+        'show_ui' => true,
+        'show_in_menu' => true,
+        'show_in_admin_bar' => true,
+        'menu_position' => 5,
+        'menu_icon' => 'dashicons-portfolio',
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt'),
+        'has_archive' => true,
+        'show_in_rest' => true,
+        'can_export' => true,
+        'capability_type' => 'post',
+        'rewrite' => array('slug' => 'progetti')
+    );
+    
+    register_post_type('progetto', $args);
+}
+add_action('init', 'blocksy_portfolio_child_register_projects');
+
+// =========================================================================
+// 3. TEMPLATE SICUREZZA - FEATURE FUTURE
+// =========================================================================
+
+/**
+ * Template per funzione AJAX sicura
+ * PRONTO PER UTILIZZO - Da attivare quando necessario
  */
 /*
-function blocksy_child_ajax_example() {
-    // 1. Verifica nonce
-    check_ajax_referer('blocksy_child_nonce', 'nonce');
-    
+function blocksy_child_ajax_handler() {
+    // 1. Verifica nonce per sicurezza
+    if (!wp_verify_nonce($_POST['nonce'], 'blocksy_child_nonce')) {
+        wp_die('Security check failed');
+    }
+
     // 2. Verifica capabilities utente
     if (!current_user_can('edit_posts')) {
         wp_die('Non autorizzato');
     }
-    
-    // 3. Sanitizza input
-    $user_input = sanitize_text_field($_POST['data']);
-    
-    // 4. Escape output
-    echo esc_html($user_input);
-    
-    wp_die();
+
+    // 3. Sanitizza tutti gli input
+    $user_data = map_deep($_POST, 'sanitize_text_field');
+
+    // 4. Validazione specifica
+    if (empty($user_data['required_field'])) {
+        wp_send_json_error('Campo obbligatorio mancante');
+    }
+
+    // 5. Escape output prima dell'invio
+    wp_send_json_success([
+        'message' => esc_html__('Operazione completata', 'blocksy-portfolio-child'),
+        'data' => esc_html($user_data['required_field'])
+    ]);
 }
-add_action('wp_ajax_blocksy_child_action', 'blocksy_child_ajax_example');
+add_action('wp_ajax_blocksy_child_action', 'blocksy_child_ajax_handler');
 */
 
 /**
- * Esempio: Shortcode sicuro per features future
+ * Template per shortcode sicuro
+ * PRONTO PER UTILIZZO - Da attivare quando necessario
  */
 /*
-function blocksy_child_safe_shortcode($atts) {
-    // 1. Sanitizza attributi
-    $atts = shortcode_atts(array(
+function blocksy_child_shortcode($atts) {
+    $atts = shortcode_atts([
         'text' => 'Default',
-        'url' => '#'
-    ), $atts, 'blocksy_child_shortcode');
-    
-    // 2. Escape tutto l'output
+        'url' => '#',
+        'class' => ''
+    ], $atts, 'blocksy_child');
+
     return sprintf(
-        '<a href="%s" class="safe-link">%s</a>',
+        '<a href="%s" class="%s">%s</a>',
         esc_url($atts['url']),
+        esc_attr(sanitize_html_class($atts['class'])),
         esc_html($atts['text'])
     );
 }
-add_shortcode('blocksy_child', 'blocksy_child_safe_shortcode');
+add_shortcode('blocksy_child', 'blocksy_child_shortcode');
 */
