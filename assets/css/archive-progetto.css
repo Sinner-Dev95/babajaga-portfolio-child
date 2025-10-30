@@ -1,6 +1,6 @@
 /* ============================================================================
-   ARCHIVIO PROGETTI - Grid responsiva
-   Design system coerente con archive-news
+   ARCHIVIO PROGETTI - Grid responsiva 2 colonne
+   Design system coerente con archive-news ma con layout diverso
    Mobile-first approach
    ============================================================================ */
 
@@ -37,7 +37,7 @@
     opacity: 0.9;
 }
 
-/* GRIGLIA PROGETTI */
+/* GRIGLIA PROGETTI - 2 colonne più larghe su desktop */
 .projects-grid {
     display: grid;
     gap: var(--space-lg);
@@ -55,12 +55,31 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    position: relative;
 }
 
 .project-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary-light);
+}
+
+/* Barra colorata in alto come archive-news */
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    z-index: 2;
+}
+
+.project-card:hover::before {
+    opacity: 1;
 }
 
 /* THUMBNAIL IMMAGINE */
@@ -82,12 +101,35 @@
     transform: scale(1.05);
 }
 
+/* Overlay gradient come archive-news */
+.project-thumbnail::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(84, 101, 255, 0.1) 0%,
+        transparent 50%,
+        rgba(15, 23, 42, 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    pointer-events: none;
+}
+
+.project-card:hover .project-thumbnail::after {
+    opacity: 1;
+}
+
 /* CONTENUTO CARDS */
 .project-card-content {
-    padding: var(--space-lg);
+    padding: var(--space-xl);
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--space-lg);
     flex-grow: 1;
 }
 
@@ -112,10 +154,11 @@
 
 /* DESCRIZIONE PROGETTO */
 .project-excerpt {
-    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
     line-height: 1.6;
     color: var(--text-secondary);
     flex-grow: 1;
+    margin-bottom: var(--space-md);
 }
 
 /* SEZIONE TECNOLOGIE */
@@ -127,6 +170,7 @@
     padding: var(--space-sm) 0;
     border-top: 1px solid var(--gray-100);
     border-bottom: 1px solid var(--gray-100);
+    margin-bottom: var(--space-md);
 }
 
 .tech-label {
@@ -141,112 +185,86 @@
     flex: 1;
 }
 
-/* LINK AZIONI */
-.project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    margin-top: auto;
-}
-
-/* BOTTONI BASE */
-.btn {
-    font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
+/* BOTTONE SINGOLO "MOSTRA DETTAGLI" - Stile come archive-news */
+.project-details-link {
+    align-self: flex-start;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
     font-weight: var(--font-weight-medium);
+    color: var(--primary);
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    border: 2px solid transparent;
     transition: all var(--transition-fast);
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--primary-light);
+    border-radius: var(--radius-md);
+    background: var(--primary-bg);
+    margin-top: auto;
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    min-height: 40px;
+    min-height: 44px; /* Touch-friendly */
 }
 
-/* BOTTONE DEMO */
-.btn-demo {
+.project-details-link:hover {
+    color: var(--white);
     background: var(--primary);
-    color: var(--white);
     border-color: var(--primary);
+    transform: translateX(4px);
 }
 
-.btn-demo:hover {
-    background: transparent;
-    color: var(--primary);
-    transform: translateY(-1px);
+/* Freccia animata come archive-news */
+.project-details-link::after {
+    content: '→';
+    transition: transform var(--transition-fast);
 }
 
-/* BOTTONE GITHUB */
-.btn-github {
-    background: var(--gray-800);
-    color: var(--white);
-    border-color: var(--gray-800);
-}
-
-.btn-github:hover {
-    background: transparent;
-    color: var(--gray-800);
-    transform: translateY(-1px);
-}
-
-/* BOTTONE DETTAGLI */
-.btn-details {
-    background: transparent;
-    color: var(--primary);
-    border-color: var(--primary);
-    margin-left: auto;
-}
-
-.btn-details:hover {
-    background: var(--primary);
-    color: var(--white);
-    transform: translateY(-1px);
+.project-details-link:hover::after {
+    transform: translateX(4px);
 }
 
 /* PAGINAZIONE */
 .projects-pagination {
-    grid-column: 1 / -1;
-    margin-top: var(--space-xl);
-    text-align: center;
-}
-
-.projects-pagination .nav-links {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--gray-200);
+    grid-column: 1 / -1;
+    padding: var(--space-xl) var(--space-md);
 }
 
 .projects-pagination .page-numbers {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--gray-200);
+    padding: var(--space-sm) var(--space-md);
+    margin: 0 var(--space-xs);
+    border: 1px solid var(--gray-300);
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--text-primary);
     transition: all var(--transition-fast);
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: var(--font-weight-medium);
 }
 
-.projects-pagination .page-numbers.current {
+.projects-pagination .page-numbers.current,
+.projects-pagination .page-numbers:hover {
     background: var(--primary);
     color: var(--white);
     border-color: var(--primary);
 }
 
-.projects-pagination .page-numbers:hover:not(.current) {
-    background: var(--gray-50);
-    border-color: var(--gray-300);
-}
-
 /* MESSAGGIO NESSUN PROGETTO */
 .no-projects {
-    grid-column: 1 / -1;
     text-align: center;
     padding: var(--space-xl);
     color: var(--text-muted);
-    font-size: clamp(1rem, 2vw, 1.125rem);
+    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    grid-column: 1 / -1;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    margin: var(--space-md) 0;
 }
 
 /* ============================================================================
@@ -256,7 +274,7 @@
 /* TABLET (768px+) */
 @media (min-width: 768px) {
     .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 2 colonne più larghe */
         gap: var(--space-xl);
     }
     
@@ -271,23 +289,42 @@
     .project-card-content {
         padding: var(--space-xl);
     }
+    
+    .projects-pagination {
+        padding: var(--space-xl);
+    }
 }
 
-/* DESKTOP (1024px+) */
+/* DESKTOP (1024px+) - Niente 3 colonne, rimaniamo a 2 più larghe */
 @media (min-width: 1024px) {
+    /* Rimaniamo a 2 colonne per dare più spazio alle card */
     .projects-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
     
-    .projects-archive-container {
+    /* Card più alte su desktop */
+    .project-thumbnail {
+        aspect-ratio: 16 / 10;
+    }
+    
+    .project-card-content {
         padding: var(--space-xl) var(--space-lg);
+    }
+    
+    /* Aumentiamo il gap tra le card su desktop */
+    .projects-grid {
+        gap: calc(var(--space-xl) * 1.25);
     }
 }
 
-/* DESKTOP LARGE (1200px+) */
-@media (min-width: 1200px) {
+/* DESKTOP LARGE (1290px+) */
+@media (min-width: 1290px) {
     .projects-grid {
         gap: calc(var(--space-xl) * 1.5);
+    }
+    
+    .project-card-content {
+        padding: calc(var(--space-xl) * 1.25);
     }
 }
 
@@ -298,17 +335,12 @@
     }
     
     .project-card-content {
-        padding: var(--space-md);
-        gap: var(--space-sm);
+        padding: var(--space-lg);
+        gap: var(--space-md);
     }
     
-    .project-links {
-        flex-direction: column;
-        gap: var(--space-xs);
-    }
-    
-    .btn-details {
-        margin-left: 0;
+    .project-details-link {
+        width: 100%;
         justify-content: center;
     }
     
@@ -319,15 +351,33 @@
     }
 }
 
+/* SCHERMI MOLTO PICCOLI (< 320px) */
+@media (max-width: 320px) {
+    .project-card-content {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+    
+    .project-details-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
 /* ============================================================================
    ACCESSIBILITÀ - Focus states
    ============================================================================ */
 
-.btn:focus-visible,
+.project-details-link:focus-visible,
 .project-title a:focus-visible,
 .projects-pagination .page-numbers:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+.project-card:focus-within {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 4px;
 }
 
 /* ============================================================================
@@ -368,8 +418,6 @@
 .project-card:nth-child(2) { animation-delay: 0.2s; }
 .project-card:nth-child(3) { animation-delay: 0.3s; }
 .project-card:nth-child(4) { animation-delay: 0.4s; }
-.project-card:nth-child(5) { animation-delay: 0.5s; }
-.project-card:nth-child(6) { animation-delay: 0.6s; }
 
 @keyframes fadeInUp {
     from {

@@ -1,7 +1,7 @@
 <?php 
 /**
  * Template archivio Progetti
- * Mostra tutti i progetti in formato griglia
+ * Mostra tutti i progetti in formato griglia con un singolo bottone
  * 
  * @package Blocksy_Portfolio_Child
  */
@@ -27,8 +27,6 @@ get_header();
                 $immagine_progetto = get_field('immagine_progetto');
                 $descrizione_breve = get_field('descrizione_breve');
                 $tecnologie = get_field('tecnologie');
-                $link_demo = get_field('link_demo');
-                $link_github = get_field('link_github');
                 
                 // Fallback per immagine
                 $immagine_url = $immagine_progetto ? $immagine_progetto['url'] : get_stylesheet_directory_uri() . '/assets/images/placeholder-project.jpg';
@@ -69,28 +67,10 @@ get_header();
                         </div>
                     <?php endif; ?>
 
-                    <!-- LINK AZIONI -->
-                    <div class="project-links">
-                        <?php if ($link_demo): ?>
-                            <a href="<?php echo esc_url($link_demo); ?>" 
-                               class="btn btn-demo" 
-                               target="_blank" 
-                               rel="noopener noreferrer">
-                                🚀 Demo Live
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if ($link_github): ?>
-                            <a href="<?php echo esc_url($link_github); ?>" 
-                               class="btn btn-github" 
-                               target="_blank" 
-                               rel="noopener noreferrer">
-                                💻 Codice
-                            </a>
-                        <?php endif; ?>
-                        
-                        <a href="<?php the_permalink(); ?>" class="btn btn-details">
-                            📖 Dettagli
+                    <!-- SINGOLO BOTTONE "MOSTRA DETTAGLI" -->
+                    <div class="project-actions">
+                        <a href="<?php the_permalink(); ?>" class="project-details-link">
+                            Mostrare Dettagli
                         </a>
                     </div>
                 </div>
