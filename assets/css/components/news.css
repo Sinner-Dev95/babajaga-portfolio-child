@@ -5,7 +5,7 @@
 
 /* === CONTAINER PRINCIPALE - Sfondo e padding === */
 .news-slider-container {
-    background-color: var(--gray-50);
+    background-color: var(--bg-secondary)
     padding: var(--space-xl) var(--space-md);
     width: 100%;
     display: flex;

@@ -40,7 +40,8 @@ function blocksy_portfolio_child_enqueue_styles() {
     $component_css = [
         'hero' => '/assets/css/components/hero.css',
         'story' => '/assets/css/components/story.css',
-        'news' => '/assets/css/components/news.css'
+        'news' => '/assets/css/components/news.css',
+        'progetto' => '/assets/css/components/progetto.css'  // ← AGGIUNTO
     ];
 
     // Merge degli array CSS
@@ -53,7 +54,8 @@ function blocksy_portfolio_child_enqueue_styles() {
         'home' => ['blocksy-child-variables'],
         'hero' => ['blocksy-child-variables'],
         'story' => ['blocksy-child-variables'], 
-        'news' => ['blocksy-child-variables']
+        'news' => ['blocksy-child-variables'],
+        'progetto' => ['blocksy-child-variables']  // ← AGGIUNTO
     ];
 
     // Caricamento CSS base e components

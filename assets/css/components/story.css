@@ -1,5 +1,5 @@
 .story-container {
-    background-color: var(--bg-secondary);
+    background-color: var(--bg-accent);
     padding: var(--space-xl) var(--space-md);
     width: 100%;
     display: flex;

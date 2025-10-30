@@ -1,0 +1,324 @@
+/* ============================================================================
+   PROGETTI HOME - Layout alternato portfolio premium
+   Diverso da news (slider) - stile alternato sx/dx
+   ============================================================================ */
+
+/* === CONTAINER PRINCIPALE === */
+.progetti-home-container {
+    background-color: var(--white);
+    padding: var(--space-xl) var(--space-md);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.progetti-home-wrapper {
+    max-width: var(--container-max-width);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+/* ============================================================================
+   HEADER SEZIONE
+   ============================================================================ */
+
+.progetti-home-header {
+    text-align: center;
+    margin-bottom: var(--space-lg);
+}
+
+.progetti-home-title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.progetti-home-subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 65ch;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* ============================================================================
+   GRID PROGETTI - Layout verticale
+   ============================================================================ */
+
+.progetti-home-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+/* ============================================================================
+   SINGOLO ITEM PROGETTO - Layout alternato
+   ============================================================================ */
+
+.progetto-home-item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+    align-items: center;
+    
+    /* Card styling */
+    background: var(--gray-100);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    
+    /* Animazione */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Ritardo animazione progressivo */
+.progetto-home-item:nth-child(1) { animation-delay: 0.1s; }
+.progetto-home-item:nth-child(2) { animation-delay: 0.2s; }
+.progetto-home-item:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================================
+   IMMAGINE PROGETTO
+   ============================================================================ */
+
+.progetto-home-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--gray-200);
+}
+
+.progetto-home-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.progetto-home-item:hover .progetto-home-img {
+    transform: scale(1.05);
+}
+
+/* Placeholder se no immagine */
+.progetto-home-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+    font-size: 4rem;
+}
+
+/* ============================================================================
+   CONTENUTO PROGETTO
+   ============================================================================ */
+
+.progetto-home-content {
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Numero progetto - Accent */
+.progetto-home-number {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-light);
+    line-height: 1;
+    opacity: 0.3;
+}
+
+/* Titolo progetto */
+.progetto-home-title-item {
+    font-size: clamp(1.375rem, 2.5vw, 1.875rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.progetto-home-title-item a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.progetto-home-title-item a:hover {
+    color: var(--primary);
+}
+
+/* Descrizione */
+.progetto-home-excerpt {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Tecnologie badge */
+.progetto-home-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-sm);
+}
+
+.tech-tag {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--white);
+    color: var(--primary);
+    border: 1px solid var(--primary-light);
+    border-radius: var(--radius-sm);
+    font-size: clamp(0.75rem, 1.25vw, 0.875rem);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-fast);
+}
+
+.tech-tag:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+/* Link progetto */
+.progetto-home-link {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--space-md);
+    transition: all var(--transition-fast);
+}
+
+.progetto-home-link:hover {
+    color: var(--primary-hover);
+    transform: translateX(4px);
+}
+
+/* ============================================================================
+   FOOTER SEZIONE - Bottone vedi tutti
+   ============================================================================ */
+
+.progetti-home-footer {
+    text-align: center;
+    margin-top: var(--space-lg);
+}
+
+.btn-view-all-progetti {
+    font-size: clamp(1rem, 1.5vw, 1.125rem);
+    font-weight: var(--font-weight-bold);
+    color: var(--white);
+    background: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary);
+    text-decoration: none;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-view-all-progetti::after {
+    content: '→';
+    transition: transform var(--transition-fast);
+}
+
+.btn-view-all-progetti:hover {
+    background: transparent;
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-view-all-progetti:hover::after {
+    transform: translateX(4px);
+}
+
+/* Nessun progetto */
+.no-progetti-home {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+/* ============================================================================
+   MEDIA QUERIES - Responsive
+   ============================================================================ */
+
+/* === TABLET 768px+ === */
+@media (min-width: 768px) {
+    .progetti-home-container {
+        padding: var(--space-xl) var(--space-lg);
+    }
+    
+    .progetti-home-header {
+        text-align: left;
+    }
+    
+    .progetti-home-subtitle {
+        margin: 0;
+    }
+    
+    /* Layout 2 colonne: immagine + testo */
+    .progetto-home-item {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+    }
+    
+    /* Item con classe .reverse: inverte ordine */
+    .progetto-home-item.reverse .progetto-home-media {
+        order: 2;
+    }
+    
+    .progetto-home-item.reverse .progetto-home-content {
+        order: 1;
+    }
+}
+
+/* === DESKTOP 1024px+ === */
+@media (min-width: 1024px) {
+    .progetti-home-grid {
+        gap: calc(var(--space-xl) * 1.5);
+    }
+    
+    .progetto-home-item {
+        grid-template-columns: 1.2fr 1fr;
+    }
+    
+    .progetto-home-item.reverse {
+        grid-template-columns: 1fr 1.2fr;
+    }
+}
+
+/* === MOBILE PICCOLO === */
+@media (max-width: 480px) {
+    .progetti-home-container {
+        padding: var(--space-lg) var(--space-sm);
+    }
+    
+    .progetto-home-content {
+        padding: var(--space-lg) var(--space-sm);
+    }
+}
