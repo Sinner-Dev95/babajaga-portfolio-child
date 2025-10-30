@@ -64,16 +64,120 @@ get_header();
     </div>
 </section>
 
+  <!-- ========================================================================
+     SEZIONE SLIDER NEWS - Carousel delle ultime novità
+     ======================================================================== -->
 
+<section class="news-slider-container" aria-labelledby="news-heading">
+    <div class="news-slider-wrapper">
         
-        <!-- LINK ALL'ARCHIVIO -->
-        <div class="news-archive-link">
-            <a href="<?php echo esc_url(get_post_type_archive_link('news')); ?>" class="btn-secondary">
+        <!-- HEADER SEZIONE -->
+        <div class="news-slider-header">
+            <h2 id="news-heading" class="news-slider-title">
+                <?php echo esc_html__('Ultime News', 'blocksy-portfolio-child'); ?>
+            </h2>
+            <p class="news-slider-subtitle">
+                <?php echo esc_html__('Resta aggiornato sulle novità del mondo tech', 'blocksy-portfolio-child'); ?>
+            </p>
+        </div>
+
+        <?php
+        // Query WordPress - Recuperiamo le ultime 6 news
+        $news_query = new WP_Query([
+            'post_type'      => 'news',
+            'posts_per_page' => 6,
+            'orderby'        => 'date',
+            'order'          => 'DESC',
+            'post_status'    => 'publish'
+        ]);
+
+        if ($news_query->have_posts()) :
+        ?>
+
+        <!-- SWIPER SLIDER -->
+        <div class="swiper news-swiper">
+            <div class="swiper-wrapper">
+                
+                <?php while ($news_query->have_posts()) : $news_query->the_post(); ?>
+                
+                <div class="swiper-slide">
+                    <article class="news-slide-card">
+                        
+                        <!-- IMMAGINE -->
+                        <?php if (has_post_thumbnail()) : ?>
+                            <div class="news-slide-image">
+                                <a href="<?php the_permalink(); ?>" 
+                                   aria-label="<?php echo esc_attr('Leggi: ' . get_the_title()); ?>">
+                                    <?php 
+                                    the_post_thumbnail('medium_large', [
+                                        'loading' => 'lazy',
+                                        'alt'     => get_the_title()
+                                    ]); 
+                                    ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- CONTENUTO -->
+                        <div class="news-slide-content">
+                            
+                            <!-- Data -->
+                            <time class="news-slide-date" datetime="<?php echo get_the_date('c'); ?>">
+                                <?php echo get_the_date('j F Y'); ?>
+                            </time>
+
+                            <!-- Titolo -->
+                            <h3 class="news-slide-title">
+                                <a href="<?php the_permalink(); ?>">
+                                    <?php the_title(); ?>
+                                </a>
+                            </h3>
+
+                            <!-- Excerpt -->
+                            <div class="news-slide-excerpt">
+                                <?php echo wp_trim_words(get_the_excerpt(), 15, '...'); ?>
+                            </div>
+
+                            <!-- Link - NOTA: Freccia rimossa dall'HTML -->
+                            <a href="<?php the_permalink(); ?>" class="news-slide-link">
+                                <?php echo esc_html__('Leggi tutto', 'blocksy-portfolio-child'); ?>
+                            </a>
+
+                        </div>
+
+                    </article>
+                </div>
+                
+                <?php endwhile; ?>
+                
+            </div>
+
+            <!-- CONTROLLI NAVIGAZIONE -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-pagination"></div>
+
+        </div>
+
+        <?php 
+        wp_reset_postdata();
+        else : 
+        ?>
+            <div class="no-news-slider">
+                <p><?php echo esc_html__('Nessuna news disponibile al momento.', 'blocksy-portfolio-child'); ?></p>
+            </div>
+        <?php endif; ?>
+
+        <!-- LINK ARCHIVIO COMPLETO -->
+        <div class="news-slider-footer">
+            <a href="<?php echo esc_url(get_post_type_archive_link('news')); ?>" 
+               class="btn-view-all">
                 <?php echo esc_html__('Vedi tutte le news', 'blocksy-portfolio-child'); ?>
             </a>
         </div>
+
     </div>
-</div>
+</section>
 
 <!-- === STORY SECTION (nuova) === -->
 
