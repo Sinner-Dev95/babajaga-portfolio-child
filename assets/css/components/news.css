@@ -5,28 +5,18 @@
 
 /* === CONTAINER PRINCIPALE - Sfondo e padding === */
 .news-slider-container {
-    /* SFONDO - Come Story section */
     background-color: var(--gray-50);
-    
-    /* PADDING FLUIDO - Mobile first */
     padding: var(--space-xl) var(--space-md);
-    
-    /* LAYOUT */
     width: 100%;
     display: flex;
     justify-content: center;
-    
-    /* OVERFLOW - Nasconde slide che escono dai bordi */
     overflow: hidden;
 }
 
 /* === WRAPPER INTERNO - Centra e limita larghezza === */
 .news-slider-wrapper {
-    /* LARGHEZZA - Come Hero e Story */
     max-width: var(--container-max-width);
     width: 100%;
-    
-    /* LAYOUT VERTICALE */
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
@@ -37,37 +27,24 @@
    ============================================================================ */
 
 .news-slider-header {
-    /* ALLINEAMENTO */
     text-align: center;
-    
-    /* SPACING */
     margin-bottom: var(--space-lg);
 }
 
 /* TITOLO PRINCIPALE */
 .news-slider-title {
-    /* TIPOGRAFIA FLUIDA - Pattern Hero */
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     font-weight: var(--font-weight-bold);
     line-height: 1.2;
-    
-    /* COLORE */
     color: var(--text-primary);
-    
-    /* SPACING */
     margin-bottom: var(--space-md);
 }
 
 /* SOTTOTITOLO */
 .news-slider-subtitle {
-    /* TIPOGRAFIA */
     font-size: clamp(1rem, 2vw, 1.25rem);
     line-height: 1.5;
-    
-    /* COLORE */
     color: var(--text-secondary);
-    
-    /* LARGHEZZA - Migliore leggibilità */
     max-width: 65ch;
     margin: 0 auto;
     opacity: 0.9;
@@ -78,23 +55,14 @@
    ============================================================================ */
 
 .news-swiper {
-    /* LARGHEZZA COMPLETA */
     width: 100%;
-    
-    /* PADDING AUMENTATO - Più respiro su tutti i lati */
-   padding: calc(var(--space-xl) + var(--space-md)) var(--space-md) calc(var(--space-xl) + var(--space-xl) + var(--space-lg)) var(--space-md);
-     
-    
-    /* POSIZIONE RELATIVA */
+    padding: calc(var(--space-xl) + var(--space-md)) var(--space-md) calc(var(--space-xl) + var(--space-xl) + var(--space-lg)) var(--space-md);
     position: relative;
 }
 
 /* WRAPPER SLIDE - Il "binario" */
 .swiper-wrapper {
-    /* ALLINEAMENTO VERTICALE */
     align-items: stretch;
-   
-    /* Swiper gestisce flex/transform automaticamente */
 }
 
 /* ============================================================================
@@ -102,10 +70,8 @@
    ============================================================================ */
 
 .swiper-slide {
-    /* ALTEZZA - Tutte le slide stessa altezza */
     height: auto;
     padding: 30px 0;
-    /* DISPLAY - Per card stretch */
     display: flex;
 }
 
@@ -114,38 +80,22 @@
    ============================================================================ */
 
 .news-slide-card {
-    /* SFONDO */
     background: var(--white);
-    
-    /* BORDO ARROTONDATO */
     border-radius: var(--radius-lg);
-    
-    /* OMBRA - Profondità sottile */
     box-shadow: var(--shadow-md);
-    
-    /* BORDO SOTTILE */
     border: 1px solid var(--gray-100);
-    
-    /* LAYOUT */
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
-    
-    /* OVERFLOW */
     overflow: hidden;
-    
-    /* TRANSIZIONE - Effetto hover fluido */
     transition: all var(--transition-normal);
 }
 
 /* HOVER CARD - Sollevamento */
 .news-slide-card:hover {
-    /* ELEVAZIONE */
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    
-    /* BORDO ACCENT */
     border-color: var(--primary-light);
 }
 
@@ -154,26 +104,16 @@
    ============================================================================ */
 
 .news-slide-image {
-    /* ASPECT RATIO - 16:9 standard */
     position: relative;
     aspect-ratio: 16 / 9;
-    
-    /* OVERFLOW - Nasconde immagine che esce */
     overflow: hidden;
-    
-    /* SFONDO FALLBACK */
     background: var(--gray-100);
 }
 
 .news-slide-image img {
-    /* DIMENSIONI */
     width: 100%;
     height: 100%;
-    
-    /* FIT - Copre area senza distorcere */
     object-fit: cover;
-    
-    /* TRANSIZIONE - Zoom hover */
     transition: transform var(--transition-normal);
 }
 
@@ -187,191 +127,104 @@
    ============================================================================ */
 
 .news-slide-content {
-    /* PADDING - Respiro interno */
     padding: var(--space-lg);
-    
-    /* LAYOUT */
     display: flex;
     flex-direction: column;
     gap: var(--space-md);
-    
-    /* CRESCITA - Occupa spazio disponibile */
     flex-grow: 1;
 }
 
 /* DATA PUBBLICAZIONE */
 .news-slide-date {
-    /* TIPOGRAFIA */
     font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
     font-weight: var(--font-weight-medium);
-    
-    /* COLORE */
     color: var(--text-muted);
-    
-    /* ICON INLINE */
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
 .news-slide-date::before {
-    /* EMOJI CALENDARIO */
     content: '📅';
     font-size: 0.875rem;
 }
 
 /* TITOLO NEWS */
 .news-slide-title {
-    /* TIPOGRAFIA FLUIDA */
     font-size: clamp(1.125rem, 2vw, 1.375rem);
     font-weight: var(--font-weight-bold);
     line-height: 1.3;
-    
-    /* COLORE */
     color: var(--text-primary);
-    
-    /* RESET */
     margin: 0;
 }
 
 .news-slide-title a {
-    /* COLORE EREDITATO */
     color: inherit;
     text-decoration: none;
-    
-    /* TRANSIZIONE */
     transition: color var(--transition-fast);
 }
 
 .news-slide-title a:hover {
-    /* HOVER - Accent color */
     color: var(--primary);
 }
 
 /* EXCERPT (Anteprima testo) */
 .news-slide-excerpt {
-    /* TIPOGRAFIA */
     font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
     line-height: 1.6;
-    
-    /* COLORE */
     color: var(--text-secondary);
-    
-    /* CRESCITA - Occupa spazio rimanente */
     flex-grow: 1;
 }
 
 /* LINK "LEGGI TUTTO" */
 .news-slide-link {
-    /* TIPOGRAFIA */
     font-size: clamp(0.9375rem, 1.5vw, 1rem);
     font-weight: var(--font-weight-bold);
-    
-    /* COLORE */
     color: var(--primary);
     text-decoration: none;
-    
-    /* LAYOUT */
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    
-    /* ALLINEAMENTO */
     align-self: flex-start;
     margin-top: auto;
-    
-    /* TRANSIZIONE */
     transition: all var(--transition-fast);
 }
 
 /* HOVER LINK */
 .news-slide-link:hover {
-    /* MOVIMENTO - Intero link slide right */
     transform: translateX(4px);
     color: var(--primary-hover);
 }
 
 /* FRECCIA ANIMATA - Aggiunta via CSS */
 .news-slide-link::after {
-    /* CONTENUTO - Freccia Unicode */
     content: '→';
-    
-    /* TRANSIZIONE - Movimento indipendente */
     transition: transform var(--transition-fast);
 }
 
 /* HOVER FRECCIA - Movimento extra */
 .news-slide-link:hover::after {
-    /* RADDOPPIA MOVIMENTO - Link si muove 4px + freccia altri 4px */
     transform: translateX(4px);
 }
 
 /* ============================================================================
-   CONTROLLI NAVIGAZIONE SWIPER
+   PAGINAZIONE (Pallini)
    ============================================================================ */
 
-/* FRECCE - Prev/Next */
-.news-swiper .swiper-button-prev,
-.news-swiper .swiper-button-next {
-    /* COLORE - Accent brand */
-    color: var(--primary);
-    
-    /* DIMENSIONI - Touch friendly (44x44px minimo) */
-    width: 44px;
-    height: 44px;
-    
-    /* SFONDO */
-    background: var(--white);
-    border-radius: 50%;
-    
-    /* OMBRA */
-    box-shadow: var(--shadow-md);
-    
-    /* TRANSIZIONE */
-    transition: all var(--transition-fast);
-}
-
-/* HOVER FRECCE */
-.news-swiper .swiper-button-prev:hover,
-.news-swiper .swiper-button-next:hover {
-    background: var(--primary);
-    color: var(--white);
-    transform: scale(1.1);
-}
-
-/* ICON SIZE - Ridimensiona icona Swiper */
-.news-swiper .swiper-button-prev::after,
-.news-swiper .swiper-button-next::after {
-    font-size: 1.25rem;
-    font-weight: bold;
-}
-
-/* PAGINAZIONE (Pallini) */
 .news-swiper .swiper-pagination {
-    /* POSIZIONE */
     bottom: 0;
 }
 
-/* PALLINI SINGOLI */
 .news-swiper .swiper-pagination-bullet {
-    /* COLORE */
     background: var(--gray-300);
     opacity: 1;
-    
-    /* DIMENSIONI */
     width: 10px;
     height: 10px;
-    
-    /* TRANSIZIONE */
     transition: all var(--transition-fast);
 }
 
-/* PALLINO ATTIVO */
 .news-swiper .swiper-pagination-bullet-active {
-    /* COLORE BRAND */
     background: var(--primary);
-    
-    /* DIMENSIONE MAGGIORE */
     width: 24px;
     border-radius: 5px;
 }
@@ -381,40 +234,24 @@
    ============================================================================ */
 
 .news-slider-footer {
-    /* ALLINEAMENTO */
     text-align: center;
-    
-    /* SPACING */
     margin-top: var(--space-lg);
 }
 
 /* BOTTONE "VEDI TUTTE" */
 .btn-view-all {
-    /* TIPOGRAFIA */
     font-size: clamp(1rem, 1.5vw, 1.125rem);
     font-weight: var(--font-weight-bold);
-    
-    /* COLORI */
     color: var(--white);
     background: var(--primary);
-    
-    /* LAYOUT */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    
-    /* SPACING INTERNO */
     padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 3vw, 2rem);
-    
-    /* BORDI */
     border-radius: var(--radius-md);
     border: 2px solid var(--primary);
-    
-    /* DECORAZIONE */
     text-decoration: none;
-    
-    /* TRANSIZIONI */
     transition: all var(--transition-normal);
     box-shadow: var(--shadow-md);
 }
@@ -442,16 +279,9 @@
    ============================================================================ */
 
 .no-news-slider {
-    /* ALLINEAMENTO */
     text-align: center;
-    
-    /* SPACING */
     padding: var(--space-xl);
-    
-    /* COLORE */
     color: var(--text-muted);
-    
-    /* TIPOGRAFIA */
     font-size: clamp(1rem, 2vw, 1.125rem);
 }
 
@@ -474,7 +304,6 @@
         gap: var(--space-sm);
     }
     
-    /* PADDING RIDOTTO - Ma sufficiente per ombre */
     .news-swiper {
         padding: var(--space-lg) 0 calc(var(--space-lg) + var(--space-md)) 0;
     }
@@ -495,7 +324,7 @@
         margin: 0;
     }
     
-    /* SWIPER - Più padding per frecce */
+    /* SWIPER - Padding ottimizzato per tablet */
     .news-swiper {
         padding: var(--space-lg) var(--space-xl) calc(var(--space-xl) + var(--space-lg));
     }
@@ -518,7 +347,7 @@
 @supports not (aspect-ratio: 16 / 9) {
     .news-slide-image {
         height: 0;
-        padding-bottom: 56.25%; /* 16:9 ratio */
+        padding-bottom: 56.25%;
         position: relative;
     }
     

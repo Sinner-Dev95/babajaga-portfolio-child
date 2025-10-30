@@ -1,0 +1,383 @@
+/* ============================================================================
+   ARCHIVIO PROGETTI - Grid responsiva
+   Design system coerente con archive-news
+   Mobile-first approach
+   ============================================================================ */
+
+/* CONTAINER PRINCIPALE */
+.projects-archive-container {
+    max-width: var(--container-max-width, 1200px);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+    background: var(--bg-primary);
+    min-height: 80vh;
+}
+
+/* HEADER ARCHIVIO */
+.projects-archive-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    padding: 0 var(--space-md);
+}
+
+.projects-archive-header h1 {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.projects-archive-header p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 65ch;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* GRIGLIA PROGETTI */
+.projects-grid {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: 1fr;
+}
+
+/* CARD SINGOLO PROGETTO */
+.project-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-100);
+    transition: all var(--transition-normal);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+}
+
+/* THUMBNAIL IMMAGINE */
+.project-thumbnail {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--gray-100);
+}
+
+.project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal);
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+/* CONTENUTO CARDS */
+.project-card-content {
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    flex-grow: 1;
+}
+
+/* TITOLO PROGETTO */
+.project-title {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.3;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.project-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.project-title a:hover {
+    color: var(--primary);
+}
+
+/* DESCRIZIONE PROGETTO */
+.project-excerpt {
+    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    flex-grow: 1;
+}
+
+/* SEZIONE TECNOLOGIE */
+.project-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: var(--space-sm) 0;
+    border-top: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.tech-label {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+}
+
+.tech-list {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+/* LINK AZIONI */
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: auto;
+}
+
+/* BOTTONI BASE */
+.btn {
+    font-size: clamp(0.875rem, 1.5vw, 0.9375rem);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+}
+
+/* BOTTONE DEMO */
+.btn-demo {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+.btn-demo:hover {
+    background: transparent;
+    color: var(--primary);
+    transform: translateY(-1px);
+}
+
+/* BOTTONE GITHUB */
+.btn-github {
+    background: var(--gray-800);
+    color: var(--white);
+    border-color: var(--gray-800);
+}
+
+.btn-github:hover {
+    background: transparent;
+    color: var(--gray-800);
+    transform: translateY(-1px);
+}
+
+/* BOTTONE DETTAGLI */
+.btn-details {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+    margin-left: auto;
+}
+
+.btn-details:hover {
+    background: var(--primary);
+    color: var(--white);
+    transform: translateY(-1px);
+}
+
+/* PAGINAZIONE */
+.projects-pagination {
+    grid-column: 1 / -1;
+    margin-top: var(--space-xl);
+    text-align: center;
+}
+
+.projects-pagination .nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.projects-pagination .page-numbers {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+    font-weight: var(--font-weight-medium);
+}
+
+.projects-pagination .page-numbers.current {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+.projects-pagination .page-numbers:hover:not(.current) {
+    background: var(--gray-50);
+    border-color: var(--gray-300);
+}
+
+/* MESSAGGIO NESSUN PROGETTO */
+.no-projects {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--text-muted);
+    font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+/* ============================================================================
+   MEDIA QUERIES - Mobile First Approach
+   ============================================================================ */
+
+/* TABLET (768px+) */
+@media (min-width: 768px) {
+    .projects-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl);
+    }
+    
+    .projects-archive-header {
+        text-align: left;
+    }
+    
+    .projects-archive-header p {
+        margin: 0;
+    }
+    
+    .project-card-content {
+        padding: var(--space-xl);
+    }
+}
+
+/* DESKTOP (1024px+) */
+@media (min-width: 1024px) {
+    .projects-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .projects-archive-container {
+        padding: var(--space-xl) var(--space-lg);
+    }
+}
+
+/* DESKTOP LARGE (1200px+) */
+@media (min-width: 1200px) {
+    .projects-grid {
+        gap: calc(var(--space-xl) * 1.5);
+    }
+}
+
+/* MOBILE PICCOLO (< 480px) */
+@media (max-width: 480px) {
+    .projects-archive-container {
+        padding: var(--space-lg) var(--space-sm);
+    }
+    
+    .project-card-content {
+        padding: var(--space-md);
+        gap: var(--space-sm);
+    }
+    
+    .project-links {
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .btn-details {
+        margin-left: 0;
+        justify-content: center;
+    }
+    
+    .project-technologies {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+/* ============================================================================
+   ACCESSIBILITÀ - Focus states
+   ============================================================================ */
+
+.btn:focus-visible,
+.project-title a:focus-visible,
+.projects-pagination .page-numbers:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* ============================================================================
+   FALLBACKS - Per browser senza supporto aspect-ratio
+   ============================================================================ */
+
+@supports not (aspect-ratio: 16 / 9) {
+    .project-thumbnail {
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        position: relative;
+    }
+    
+    .project-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* ============================================================================
+   ANIMAZIONI - Transizioni fluide
+   ============================================================================ */
+
+.projects-archive-container {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.project-card {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+/* Animazione progressiva per le card */
+.project-card:nth-child(1) { animation-delay: 0.1s; }
+.project-card:nth-child(2) { animation-delay: 0.2s; }
+.project-card:nth-child(3) { animation-delay: 0.3s; }
+.project-card:nth-child(4) { animation-delay: 0.4s; }
+.project-card:nth-child(5) { animation-delay: 0.5s; }
+.project-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

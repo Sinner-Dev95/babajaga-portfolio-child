@@ -87,6 +87,36 @@ function blocksy_portfolio_child_enqueue_styles() {
             );
         }
     }
+    
+    // CSS condizionale per singolo progetto
+    if (is_singular('progetto')) {
+        $single_progetto_css = '/assets/css/single-progetto.css';
+        $single_progetto_path = get_stylesheet_directory() . $single_progetto_css;
+
+        if (file_exists($single_progetto_path)) {
+            wp_enqueue_style(
+                'blocksy-child-single-progetto',
+                esc_url(get_stylesheet_directory_uri() . $single_progetto_css),
+                array('blocksy-child-variables'),
+                $theme_version
+            );
+        }
+    }
+    
+    // CSS condizionale per archivio progetti
+    if (is_post_type_archive('progetto')) {
+        $archive_progetto_css = '/assets/css/archive-progetto.css';
+        $archive_progetto_path = get_stylesheet_directory() . $archive_progetto_css;
+
+        if (file_exists($archive_progetto_path)) {
+            wp_enqueue_style(
+                'blocksy-child-archive-progetto',
+                esc_url(get_stylesheet_directory_uri() . $archive_progetto_css),
+                array('blocksy-child-variables'),
+                $theme_version
+            );
+        }
+    }
 }
 add_action('wp_enqueue_scripts', 'blocksy_portfolio_child_enqueue_styles', 15);
 
@@ -141,7 +171,7 @@ function blocksy_portfolio_child_enqueue_scripts() {
         wp_enqueue_script(
             'blocksy-child-main',
             esc_url(get_stylesheet_directory_uri() . $js_file),
-            ['jquery'], // Dipendenze: jQuery
+            ['jquery'],
             wp_get_theme()->get('Version'),
             true
         );
@@ -225,7 +255,6 @@ add_action('init', 'blocksy_portfolio_child_register_news');
 
 /**
  * Custom Post Type: Progetti Portfolio
- * Preparato per sviluppi futuri
  */
 function blocksy_portfolio_child_register_projects() {
     $labels = array(
@@ -260,6 +289,34 @@ function blocksy_portfolio_child_register_projects() {
     );
     
     register_post_type('progetto', $args);
+
+    // Tassonomia: Tecnologie
+    register_taxonomy('tecnologia', 'progetto', array(
+        'labels' => array(
+            'name'          => 'Tecnologie',
+            'singular_name' => 'Tecnologia',
+        ),
+        'hierarchical'      => false,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'rewrite'           => array('slug' => 'tecnologia'),
+        'show_in_rest'      => true,
+    ));
+
+    // Tassonomia: Tipologie Progetto
+    register_taxonomy('tipo_progetto', 'progetto', array(
+        'labels' => array(
+            'name'          => 'Tipologie Progetto',
+            'singular_name' => 'Tipologia Progetto',
+        ),
+        'hierarchical'      => true,
+        'public'            => true,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'rewrite'           => array('slug' => 'tipo-progetto'),
+        'show_in_rest'      => true,
+    ));
 }
 add_action('init', 'blocksy_portfolio_child_register_projects');
 
