@@ -368,3 +368,30 @@
     gap: var(--space-sm);
   }
 }
+
+/* ============================================================================
+   CANVAS GRIGLIA INTERATTIVA
+   ============================================================================ */
+
+.hero-grid-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Contenuto hero deve stare sopra il canvas */
+.hero-section {
+    position: relative;
+    z-index: 2;
+}
+
+/* Disabilita canvas su mobile/tablet - no senso senza cursor */
+@media (max-width: 1024px) {
+    .hero-grid-canvas {
+        display: none;
+    }
+}

@@ -7,6 +7,7 @@ get_header();
      ======================================================================== -->
 
 <section class="hero-section-container">
+    <canvas id="hero-grid-canvas" class="hero-grid-canvas"></canvas>
     <div class="hero-section">
         <div class="hero-content">
             <h1 class="hero-title"><?php echo esc_html__('Sviluppatore web, trasformo le tue  idee in siti veloci e funzionali', 'blocksy-portfolio-child'); ?></h1>
