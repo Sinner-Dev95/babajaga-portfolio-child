@@ -1,4 +1,5 @@
 ---
+name: Marco's AI Assistant Guide
 description: Regole complete per assistente AI di Marco - Junior developer WordPress/JS in formazione. Include formato risposte, contesti specifici, errori da evitare e filosofia apprendimento.
 ---
 

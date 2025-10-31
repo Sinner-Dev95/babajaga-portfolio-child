@@ -32,8 +32,7 @@ function blocksy_portfolio_child_enqueue_styles() {
     // CSS Base del tema
     $css_assets = [
         'reset' => '/assets/css/reset.css',
-        'variables' => '/assets/css/variables.css',
-        'home' => '/assets/css/home.css'
+        'variables' => '/assets/css/variables.css'
     ];
 
     // CSS Components del tema
@@ -41,7 +40,7 @@ function blocksy_portfolio_child_enqueue_styles() {
         'hero' => '/assets/css/components/hero.css',
         'story' => '/assets/css/components/story.css',
         'news' => '/assets/css/components/news.css',
-        'progetto' => '/assets/css/components/progetto.css'  // ← AGGIUNTO
+        'progetto' => '/assets/css/components/progetto.css'
     ];
 
     // Merge degli array CSS
@@ -51,11 +50,10 @@ function blocksy_portfolio_child_enqueue_styles() {
     $dependencies = [
         'reset' => [],
         'variables' => ['blocksy-child-reset'],
-        'home' => ['blocksy-child-variables'],
         'hero' => ['blocksy-child-variables'],
         'story' => ['blocksy-child-variables'], 
         'news' => ['blocksy-child-variables'],
-        'progetto' => ['blocksy-child-variables']  // ← AGGIUNTO
+        'progetto' => ['blocksy-child-variables']
     ];
 
     // Caricamento CSS base e components
@@ -84,6 +82,21 @@ function blocksy_portfolio_child_enqueue_styles() {
             wp_enqueue_style(
                 'blocksy-child-archive-news',
                 esc_url(get_stylesheet_directory_uri() . $archive_news_css),
+                array('blocksy-child-variables'),
+                $theme_version
+            );
+        }
+    }
+    
+    // CSS condizionale per singola news
+    if (is_singular('news')) {
+        $single_news_css = '/assets/css/single-news.css';
+        $single_news_path = get_stylesheet_directory() . $single_news_css;
+
+        if (file_exists($single_news_path)) {
+            wp_enqueue_style(
+                'blocksy-child-single-news',
+                esc_url(get_stylesheet_directory_uri() . $single_news_css),
                 array('blocksy-child-variables'),
                 $theme_version
             );
@@ -156,6 +169,54 @@ function blocksy_child_enqueue_swiper() {
     );
 }
 add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_swiper', 17);
+
+// =========================================================================
+// NUOVA SEZIONE DA AGGIUNGERE QUI (priorità 18)
+// =========================================================================
+function blocksy_child_enqueue_gsap() {
+    // Carica solo su homepage per ora
+    if (!is_front_page()) {
+        return;
+    }
+
+    $gsap_version = '3.12.2';
+    $theme_version = wp_get_theme()->get('Version');
+    
+    // GSAP Core
+    wp_enqueue_script(
+        'gsap-core',
+        'https://cdnjs.cloudflare.com/ajax/libs/gsap/' . $gsap_version . '/gsap.min.js',
+        array(),
+        $gsap_version,
+        true
+    );
+    
+    // ScrollTrigger Plugin
+    wp_enqueue_script(
+        'gsap-scrolltrigger',
+        'https://cdnjs.cloudflare.com/ajax/libs/gsap/' . $gsap_version . '/ScrollTrigger.min.js',
+        array('gsap-core'),
+        $gsap_version,
+        true
+    );
+    
+    // Il TUO file di animazioni (lo creeremo dopo)
+    $animations_file = '/assets/js/portfolio-animations.js';
+    $animations_path = get_stylesheet_directory() . $animations_file;
+
+    if (file_exists($animations_path)) {
+        wp_enqueue_script(
+            'blocksy-child-gsap-animations',
+            esc_url(get_stylesheet_directory_uri() . $animations_file),
+            array('gsap-core', 'gsap-scrolltrigger'),
+            $theme_version,
+            true
+        );
+    } else {
+        error_log("Blocksy Child: File {$animations_file} non trovato");
+    }
+}
+add_action('wp_enqueue_scripts', 'blocksy_child_enqueue_gsap', 18);
 
 /**
  * Carica script JavaScript principale del tema

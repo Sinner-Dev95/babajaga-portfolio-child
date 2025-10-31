@@ -181,7 +181,6 @@ get_header();
 
     </div>
 </section>
-
 <!-- ========================================================================
      STORY SECTION - Chi sono
      POSIZIONE 3: Trust building dopo aver visto i progetti
@@ -246,14 +245,24 @@ get_header();
             </div>
 
             <div class="story-signature">
-                <img
-                    src="<?php echo esc_url('http://babajaga-lab.local/wp-content/uploads/2025/10/Immagine_2025-10-28_103723-removebg-preview.png'); ?>"
-                    alt="<?php echo esc_attr__('Firma digitale di Marco - Sviluppatore Web', 'blocksy-portfolio-child'); ?>"
-                    class="signature-image"
-                    loading="lazy"
-                    decoding="async"
-                    width="200"
-                    height="80">
+                <?php
+                // Firma - Usa ID dinamico invece di URL hardcoded
+                $signature_id = 75;
+                $signature_url = wp_get_attachment_url($signature_id);
+
+                if ($signature_url): ?>
+                    <img
+                        src="<?php echo esc_url($signature_url); ?>"
+                        alt="<?php echo esc_attr__('Firma digitale di Marco - Sviluppatore Web', 'blocksy-portfolio-child'); ?>"
+                        class="signature-image"
+                        loading="lazy"
+                        decoding="async"
+                        width="200"
+                        height="80">
+                <?php else: ?>
+                    <!-- Fallback se immagine non trovata -->
+                    <p class="signature-text" style="font-style: italic; color: var(--text-muted);">— Marco</p>
+                <?php endif; ?>
             </div>
         </div>
 
