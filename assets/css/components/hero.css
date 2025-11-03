@@ -1,6 +1,6 @@
 /* ============================================================================
-   HOME.CSS - HERO SECTION
-   Versione riorganizzata: Media queries raggruppate per breakpoint
+   HERO SECTION - Button Premium Hover Effects
+   Versione ottimizzata con hover effects professionali
    ============================================================================ */
 
 /* === BASE STYLES (Mobile First) === */
@@ -102,17 +102,17 @@
   opacity: 0.95;
 }
 
-/* === BOTTONE RESPONSIVE === */
+/* === BOTTONE RESPONSIVE - NUOVO HOVER EFFECT === */
 .hero-button a {
   /* TIPOGRAFIA FLUIDA */
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1,125rem, 1.5vw, 1.3rem);
   font-weight: 600;
   letter-spacing: 0.01em;
   
   /* COLORI VARIABILI */
   color: var(--gray-900);
-  background: var(--white);
-  border: 2px solid var(--white);
+  background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
+  border: 2px solid var(--button-hover); /* Usiamo la nuova variabile */
   
   /* LAYOUT RESPONSIVE */
   border-radius: var(--radius-md);
@@ -125,37 +125,69 @@
   justify-content: center;
   gap: 0.5rem;
   
-  /* TRANSIZIONI */
+  /* TRANSIZIONI PREMIUM */
   transition: all var(--transition-normal);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  /* POSITION PER PSEUDO-ELEMENTS */
   position: relative;
   overflow: hidden;
 }
 
-/* FREECCIA ANIMATA */
+/* === SHIMMER EFFECT - Linea che scorre === */
+.hero-button a::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 100%
+  );
+  transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+}
+
+/* === FRECCIA ANIMATA BASE === */
 .hero-button a::after {
   content: '→';
   transition: transform var(--transition-fast);
+  font-weight: bold;
 }
 
-.hero-button a:hover::after {
-  transform: translateX(4px);
-}
-
-/* STATI INTERATTIVI */
+/* === HOVER STATE - Effetto premium con teal === */
 .hero-button a:hover {
-  background: transparent;
+  background: var(--success); /* Teal professionale */
   color: var(--white);
-  border-color: var(--white);
+  border-color: var(--button-hover);
+  
+  transform: translateY(-3px);
   box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.2),
-    0 0 0 4px rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+    0 8px 25px rgba(8, 145, 178, 0.3), /* Teal shadow */
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* === ATTIVAZIONE SHIMMER - La linea scorre da sinistra a destra === */
+.hero-button a:hover::before {
+  left: 100%;
+}
+
+/* === HOVER FRECCIA - Movimento più fluido === */
+.hero-button a:hover::after {
+  transform: translateX(6px);
+}
+
+/* === FOCUS STATE - Accessibilità === */
 .hero-button a:focus-visible {
-  outline: 2px solid var(--white);
+  outline: 2px solid var(--button-hover); /* Teal focus */
   outline-offset: 4px;
+  box-shadow: 
+    0 0 0 4px rgba(8, 145, 178, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* === SEZIONE IMMAGINE === */
@@ -394,4 +426,40 @@
     .hero-grid-canvas {
         display: none;
     }
+}
+
+/* ============================================================================
+   HOVER EFFECTS PREMIUM PER HERO BUTTON
+   ============================================================================ */
+
+/* SUPPORTO PER RIDUCED MOTION - Accessibilità */
+@media (prefers-reduced-motion: reduce) {
+  .hero-button a,
+  .hero-button a::before,
+  .hero-button a::after {
+    transition: none;
+  }
+  
+  .hero-button a:hover {
+    transform: none;
+  }
+  
+  .hero-button a:hover::before {
+    left: -100%;
+  }
+  
+  .hero-button a:hover::after {
+    transform: translateX(0);
+  }
+}
+
+/* OTTIMIZZAZIONE TOUCH DEVICES */
+@media (hover: none) and (pointer: coarse) {
+  .hero-button a::before {
+    display: none; /* Nascondi shimmer su touch */
+  }
+  
+  .hero-button a:hover {
+    transform: none; /* Disable lift su touch */
+  }
 }

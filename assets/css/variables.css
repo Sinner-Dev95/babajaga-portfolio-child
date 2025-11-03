@@ -33,6 +33,7 @@
     --text-primary: var(--gray-900);
     --text-secondary: var(--gray-700);
     --text-muted: var(--gray-500);
+    --button-hover: #0891B2; 
 
 
       /* === Layout === */

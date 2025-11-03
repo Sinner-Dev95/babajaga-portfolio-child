@@ -5,7 +5,17 @@
  * Funzionalità:
  * - Swiper News Slider (homepage)
  * - Canvas Grid Interattivo (hero section)
+ * - Fix race condition canvas dimensioni
+ * - Fix memory leak cleanup
+ * - Fix navigazione SPA (Single Page App)
+ * - Fix re-inizializzazione multipla (Instance Guard)
  */
+
+// 🔒 INSTANCE GUARD GLOBALE
+// Questa flag previene che più istanze dell'animazione canvas girino contemporaneamente.
+// Deve essere in scope globale (fuori da DOMContentLoaded) così è accessibile da tutte
+// le funzioni che devono controllare o modificare lo stato di inizializzazione.
+let heroGridInitialized = false;
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -16,7 +26,54 @@ document.addEventListener('DOMContentLoaded', function() {
     initHeroGridCanvas();
     
     // =========================================================================
-    // SWIPER NEWS SLIDER - Codice esistente che funziona
+    // GESTIONE EVENTI NAVIGAZIONE SPA
+    // Per garantire cleanup corretto quando l'utente naviga via dalla pagina
+    // =========================================================================
+    
+    // 🧹 CLEANUP quando si naviga via dalla pagina
+    // L'evento 'pagehide' si triggera quando l'utente lascia la pagina
+    // (click su link, back button, chiude tab). È più affidabile di 'beforeunload'
+    // per la pulizia delle risorse perché viene sempre triggerato.
+    window.addEventListener('pagehide', function() {
+        console.log('🧹 Pagina nascosta, cleanup hero grid...');
+        if (window.heroCanvasCleanup) {
+            window.heroCanvasCleanup();
+        }
+    });
+    
+    // 🔄 RE-INIZIALIZZAZIONE quando si torna indietro con il browser
+    // L'evento 'pageshow' si triggera quando l'utente torna sulla pagina
+    // (back button, forward button, ricarica). Dobbiamo re-inizializzare
+    // l'animazione canvas se siamo sulla homepage.
+    window.addEventListener('pageshow', function(event) {
+        // Verifica che siamo sulla homepage
+        if (!document.body.classList.contains('home')) {
+            return;
+        }
+        
+        console.log('🔄 Pagina mostrata, re-inizializzazione hero grid...');
+        
+        // 🔒 GUARD: Se già inizializzato, cleanup istanza precedente
+        // Questo può succedere se la navigazione è molto rapida e la cleanup
+        // non ha fatto in tempo a completare prima del pageshow
+        if (heroGridInitialized) {
+            console.log('🔒 Instance guard: cleanup istanza precedente prima di re-init...');
+            if (window.heroCanvasCleanup) {
+                window.heroCanvasCleanup();
+            }
+        }
+        
+        // Re-inizializza con un piccolo delay per dare tempo al browser
+        // di completare il rendering della pagina. 200ms è un buon compromesso:
+        // abbastanza lungo da evitare race condition, abbastanza breve da non
+        // essere percepibile dall'utente.
+        setTimeout(function() {
+            initHeroGridCanvas();
+        }, 200);
+    });
+    
+    // =========================================================================
+    // SWIPER NEWS SLIDER - Funzionalità esistente e stabile
     // =========================================================================
     
     function initSwiperNewsSlider() {
@@ -104,47 +161,70 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function initHeroGridCanvas() {
         
-        // Verifica che siamo su homepage
+        // 🔒 INSTANCE GUARD - Prima cosa da controllare
+        // Previene che più istanze dell'animazione girino contemporaneamente.
+        // Se la flag è true, significa che c'è già un'istanza attiva, quindi
+        // usciamo immediatamente senza fare nulla.
+        if (heroGridInitialized) {
+            console.log('🔒 Hero grid già inizializzata, skipping...');
+            return;
+        }
+        
+        console.log('🔄 Starting fresh hero grid initialization...');
+        
+        // =====================================================================
+        // VALIDAZIONE PREREQUISITI
+        // Verifichiamo che tutte le condizioni necessarie siano soddisfatte
+        // prima di procedere con l'inizializzazione
+        // =====================================================================
+        
+        // CHECK 1: Verifica che siamo su homepage
+        // L'animazione canvas è specifica per la hero section della homepage
         if (!document.body.classList.contains('home')) {
             console.log('ℹ️ Hero grid: non siamo sulla homepage');
             return;
         }
         
-        // Verifica che siamo su desktop (no senso su mobile senza cursor)
+        // CHECK 2: Verifica che siamo su desktop
+        // Su mobile/tablet non ha senso avere un'animazione che reagisce al cursore
+        // perché non c'è un cursore - c'è solo il touch. Risparmiamo risorse.
         if (window.innerWidth <= 1024) {
             console.log('ℹ️ Hero grid: dispositivo mobile/tablet rilevato, skip canvas');
             return;
         }
         
+        // CHECK 3: Verifica che l'elemento canvas esista nel DOM
         const canvas = document.getElementById('hero-grid-canvas');
         if (!canvas) {
             console.log('⚠️ Hero grid: canvas element non trovato');
             return;
         }
         
-        // IMPORTANTE: Prendiamo il container parent per ascoltare gli eventi
-        // Il canvas ha pointer-events: none per non bloccare click sui bottoni
-        // quindi ascoltiamo sul parent e convertiamo le coordinate
+        // CHECK 4: Verifica che il container parent esista
+        // Abbiamo bisogno del container per ascoltare gli eventi del mouse,
+        // perché il canvas ha pointer-events: none per non bloccare i click
+        // sui bottoni della hero section
         const container = canvas.parentElement;
         if (!container) {
             console.log('⚠️ Hero grid: container parent non trovato');
             return;
         }
         
-        console.log('✅ Inizializzazione Hero Grid Canvas...');
+        // ✅ TUTTI I CHECK PASSATI - Settiamo la flag SUBITO
+        // CRITICO: Settiamo la flag QUI, non alla fine della funzione.
+        // Questo previene che due inizializzazioni partano quasi contemporaneamente
+        // in scenari di navigazione rapida (l'utente clicca back velocemente).
+        // Anche se questa inizializzazione non è ancora completa, la seconda
+        // verrà bloccata dall'instance guard sopra.
+        heroGridInitialized = true;
+        
+        console.log('✅ Hero Grid Canvas: prerequisiti verificati, starting init...');
+        
+        // =====================================================================
+        // SETUP CANVAS E CONFIGURAZIONE
+        // =====================================================================
         
         const ctx = canvas.getContext('2d');
-        
-        // Setup dimensioni canvas - deve riempire la hero section
-        function resizeCanvas() {
-            canvas.width = container.offsetWidth;
-            canvas.height = container.offsetHeight;
-            // Quando ridimensioniamo, ricreiamo la griglia per adattarla
-            createGrid();
-        }
-        
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
         
         // CONFIGURAZIONE GRIGLIA - Parametri che definiscono aspetto e comportamento
         const config = {
@@ -167,15 +247,93 @@ document.addEventListener('DOMContentLoaded', function() {
         // Array che contiene tutti i punti della griglia
         let dots = [];
         
-        // CREAZIONE GRIGLIA - Genera array di punti con posizioni fisse
+        // Variabili per gestire animazione e cleanup
+        // Devono essere in scope della closure così la cleanup function può accedervi
+        let animationFrameId = null;
+        let checkStartInterval = null;
+        let retryCount = 0;
+        const maxRetries = 10;
+        
+        // =====================================================================
+        // RESIZE CANVAS - FIX RACE CONDITION
+        // Sistema robusto per ottenere dimensioni corrette anche se il browser
+        // non ha ancora finito di calcolare il layout CSS
+        // =====================================================================
+        
+        function resizeCanvas() {
+            // STRATEGIA MULTIPLA per garantire dimensioni corrette
+            // Proviamo 3 metodi diversi in ordine di affidabilità
+            
+            // METODO 1: getBoundingClientRect() - Più affidabile, forza un reflow
+            const rect = container.getBoundingClientRect();
+            let width = rect.width;
+            let height = rect.height;
+            
+            // FALLBACK 1: offsetWidth/Height - Legge proprietà cached
+            if (width === 0 || height === 0) {
+                console.log('⚠️ getBoundingClientRect() ritorna zero, fallback a offsetWidth/Height');
+                width = container.offsetWidth;
+                height = container.offsetHeight;
+            }
+            
+            // FALLBACK 2: Dimensioni viewport - Ultima spiaggia
+            if (width === 0 || height === 0) {
+                console.log('⚠️ offsetWidth/Height ritorna zero, fallback a viewport dimensions');
+                width = window.innerWidth;
+                height = window.innerHeight * 0.8; // 80% altezza viewport come stima
+            }
+            
+            // Applica dimensioni al canvas
+            canvas.width = width;
+            canvas.height = height;
+            
+            console.log(`📐 Canvas dimensions: ${width}x${height} (attempt ${retryCount + 1}/${maxRetries})`);
+            
+            // Se abbiamo dimensioni valide, crea la griglia
+            if (width > 0 && height > 0) {
+                createGrid();
+            } else {
+                // Se ancora zero, retry con backoff
+                retryCount++;
+                if (retryCount < maxRetries) {
+                    console.log(`⏳ Retry attempt ${retryCount + 1} in 50ms...`);
+                    setTimeout(resizeCanvas, 50);
+                } else {
+                    console.error('❌ Failed to get canvas dimensions after all retries');
+                }
+            }
+        }
+        
+        // Esegui resize con un piccolo delay per dare tempo al browser
+        // di completare il rendering CSS. 100ms è sufficiente nella maggior
+        // parte dei casi, e il retry interno gestisce i casi più lenti.
+        setTimeout(resizeCanvas, 100);
+        
+        // Gestione resize della finestra con debouncing
+        // Quando l'utente ridimensiona la finestra, aspettiamo che finisca
+        // di ridimensionare prima di ricalcolare la griglia (altrimenti
+        // faremmo centinaia di ricalcoli inutili durante il resize)
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(resizeCanvas, 100);
+        });
+        
+        // =====================================================================
+        // CREAZIONE GRIGLIA
+        // Genera array di punti con posizioni fisse disposte in griglia uniforme
+        // =====================================================================
+        
         function createGrid() {
-            dots = []; // Reset array
+            dots = []; // Reset array per evitare accumulo in caso di re-init
             
             // Calcola quanti punti entrano in larghezza e altezza
+            // Math.floor garantisce numero intero di punti
             const cols = Math.floor(canvas.width / config.spacing);
             const rows = Math.floor(canvas.height / config.spacing);
             
             // Calcola offset per centrare la griglia nel canvas
+            // Questo rende la griglia simmetrica e bilanciata visivamente
             const offsetX = (canvas.width - (cols * config.spacing)) / 2;
             const offsetY = (canvas.height - (rows * config.spacing)) / 2;
             
@@ -185,10 +343,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     dots.push({
                         x: offsetX + (i * config.spacing),  // Posizione X fissa
                         y: offsetY + (j * config.spacing),  // Posizione Y fissa
-                        currentRadius: config.dotRadius,    // Raggio corrente (animato)
-                        currentOpacity: config.baseOpacity, // Opacità corrente (animata)
-                        targetRadius: config.dotRadius,     // Target verso cui animare
-                        targetOpacity: config.baseOpacity   // Target opacità
+                        currentRadius: config.dotRadius,    // Raggio corrente (sarà animato)
+                        currentOpacity: config.baseOpacity, // Opacità corrente (sarà animata)
+                        targetRadius: config.dotRadius,     // Target verso cui animare il raggio
+                        targetOpacity: config.baseOpacity   // Target verso cui animare l'opacità
                     });
                 }
             }
@@ -196,23 +354,20 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`✅ Griglia creata: ${dots.length} punti (${cols}x${rows})`);
         }
         
-        createGrid();
+        // =====================================================================
+        // TRACKING CURSORE
+        // Ascoltiamo eventi mouse sul CONTAINER, non sul canvas, perché il
+        // canvas ha pointer-events: none per non interferire con click su bottoni
+        // =====================================================================
         
-        // TRACKING CURSORE - Ascoltiamo sul CONTAINER, non sul canvas
-        // Questo funziona anche con pointer-events: none sul canvas
         container.addEventListener('mousemove', function(e) {
-            // getBoundingClientRect ci dà la posizione del container nella viewport
+            // getBoundingClientRect() ci dà la posizione del container nella viewport
             const rect = container.getBoundingClientRect();
             
-            // Convertiamo le coordinate del mouse in coordinate relative al container
-            // e.clientX è la posizione X del mouse nella viewport
-            // rect.left è la distanza del container dal bordo sinistro della viewport
-            // La differenza ci dà la posizione X del mouse dentro il container
+            // Convertiamo coordinate mouse da coordinate viewport a coordinate
+            // relative al container
             mouse.x = e.clientX - rect.left;
             mouse.y = e.clientY - rect.top;
-            
-            // Debug: togli il commento se vuoi vedere le coordinate nella console
-            // console.log(`Mouse: ${Math.round(mouse.x)}, ${Math.round(mouse.y)}`);
         });
         
         // Quando cursore esce dal container, reset posizione lontano
@@ -222,7 +377,10 @@ document.addEventListener('DOMContentLoaded', function() {
             mouse.y = -1000;
         });
         
-        // ANIMAZIONE LOOP - Viene chiamata 30 volte al secondo
+        // =====================================================================
+        // ANIMAZIONE LOOP - 30 FPS
+        // =====================================================================
+        
         function animate() {
             // Pulisci canvas (rimuovi frame precedente)
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -231,12 +389,12 @@ document.addEventListener('DOMContentLoaded', function() {
             dots.forEach(dot => {
                 
                 // Calcola distanza tra cursore e punto corrente
-                // Usiamo distanza al quadrato per evitare Math.sqrt (operazione costosa)
+                // Usiamo distanza al quadrato per evitare Math.sqrt (costosa)
                 const dx = mouse.x - dot.x;
                 const dy = mouse.y - dot.y;
                 const distanceSquared = dx * dx + dy * dy;
                 
-                // Raggio di influenza al quadrato (per confronto con distanceSquared)
+                // Raggio di influenza al quadrato (per confronto efficiente)
                 const influenceRadiusSquared = config.influenceRadius * config.influenceRadius;
                 
                 // Se punto è dentro raggio di influenza, calcoliamone l'intensità
@@ -249,7 +407,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const intensity = 1 - (distance / config.influenceRadius);
                     
                     // Imposta target in base a intensità
-                    // Più il cursore è vicino, più il punto diventa grande e luminoso
+                    // Interpolazione lineare tra valori base e valori hover
                     dot.targetRadius = config.dotRadius + ((config.dotRadiusHover - config.dotRadius) * intensity);
                     dot.targetOpacity = config.baseOpacity + ((config.hoverOpacity - config.baseOpacity) * intensity);
                     
@@ -260,12 +418,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 // EASING SMOOTH - Interpola valori correnti verso target
-                // Invece di jump istantaneo, ci muoviamo del 10% della distanza ogni frame
-                // Questo crea una transizione fluida e naturale
+                // Invece di jump istantaneo, ci muoviamo del 10% (config.smoothing)
+                // della distanza ogni frame. Questo crea transizione fluida.
                 dot.currentRadius += (dot.targetRadius - dot.currentRadius) * config.smoothing;
                 dot.currentOpacity += (dot.targetOpacity - dot.currentOpacity) * config.smoothing;
                 
-                // DISEGNA PUNTO - Crea cerchio sulla posizione del punto
+                // DISEGNA PUNTO
                 ctx.beginPath();
                 ctx.arc(dot.x, dot.y, dot.currentRadius, 0, Math.PI * 2);
                 ctx.fillStyle = config.color;
@@ -273,17 +431,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 ctx.fill();
             });
             
-            // Reset globalAlpha per non influenzare altri disegni futuri
+            // Reset globalAlpha per non influenzare disegni futuri
             ctx.globalAlpha = 1;
         }
         
-        // START ANIMATION LOOP - 30 FPS per performance ottimale
-        // Non usiamo 60fps perché per questo tipo di animazione ambientale
-        // 30fps è più che sufficiente e dimezza il carico sulla CPU
-        let animationFrameId;
+        // =====================================================================
+        // START ANIMATION LOOP - 30 FPS
+        // Non usiamo 60fps perché per animazione ambientale 30fps è sufficiente
+        // e dimezza il carico CPU
+        // =====================================================================
+        
         let lastTime = 0;
         const fps = 30;
-        const interval = 1000 / fps;
+        const interval = 1000 / fps; // ~33ms
         
         function loop(currentTime) {
             animationFrameId = requestAnimationFrame(loop);
@@ -297,17 +457,101 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        loop(0);
+        // =====================================================================
+        // AVVIO RITARDATO ANIMAZIONE
+        // Aspettiamo che la griglia sia effettivamente creata (dots.length > 0)
+        // prima di avviare l'animation loop
+        // =====================================================================
         
-        console.log('✅ Hero Grid Canvas animazione attiva (30 FPS)');
+        let animationStarted = false;
+        let checkStartAttempts = 0;
+        const maxCheckAttempts = 50; // 50 tentativi × 100ms = 5 secondi max
         
-        // Cleanup quando pagina viene scaricata
-        // Fermiamo l'animation loop per liberare risorse
-        window.addEventListener('beforeunload', function() {
+        function startAnimation() {
+            if (!animationStarted && dots.length > 0) {
+                animationStarted = true;
+                loop(0);
+                console.log('✅ Hero Grid Canvas animazione attiva (30 FPS)');
+                return true; // Indica successo
+            }
+            return false; // Indica che non è ancora pronto
+        }
+        
+        // Controlla periodicamente con TIMEOUT di sicurezza (FIX MEMORY LEAK)
+        checkStartInterval = setInterval(function() {
+            checkStartAttempts++;
+            
+            const animationReady = startAnimation();
+            
+            if (animationReady) {
+                // Animazione avviata con successo, ferma il check interval
+                clearInterval(checkStartInterval);
+                checkStartInterval = null;
+                console.log('🎉 Animazione avviata dopo', checkStartAttempts, 'tentativi (', (checkStartAttempts * 100), 'ms)');
+            } else if (checkStartAttempts >= maxCheckAttempts) {
+                // TIMEOUT DI SICUREZZA - Evita memory leak
+                // Dopo 5 secondi, se l'animazione non è partita, fermiamo il check
+                clearInterval(checkStartInterval);
+                checkStartInterval = null;
+                console.error('❌ TIMEOUT: Animazione hero grid non è riuscita ad avviarsi dopo', 
+                             (checkStartAttempts * 100) + 'ms');
+                console.error('❌ Possibili cause:');
+                console.error('   - Canvas con dimensioni 0x0');
+                console.error('   - Container parent non trovato o nascosto dal CSS');
+                console.error('   - Errore JavaScript che impedisce la creazione della griglia');
+                
+                // Debug info per troubleshooting
+                console.group('🔍 Debug Info');
+                console.log('Canvas width:', canvas.width, 'x height:', canvas.height);
+                console.log('Container:', container);
+                console.log('Dots array length:', dots.length);
+                console.groupEnd();
+            }
+        }, 100); // Controlla ogni 100ms
+        
+        // =====================================================================
+        // CLEANUP FUNCTION GLOBALE
+        // Registriamo una funzione globale per pulire tutte le risorse quando
+        // l'utente naviga via dalla pagina
+        // =====================================================================
+        
+        window.heroCanvasCleanup = function() {
+            console.log('🧹 Cleanup hero grid...');
+            
+            // Ferma animation loop se attivo
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
             }
-        });
+            
+            // Ferma check interval se attivo
+            if (checkStartInterval) {
+                clearInterval(checkStartInterval);
+                checkStartInterval = null;
+            }
+            
+            // Pulisci canvas
+            if (ctx && canvas) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Reset mouse position
+            mouse.x = -1000;
+            mouse.y = -1000;
+            
+            // Reset contatori e flag
+            animationStarted = false;
+            checkStartAttempts = 0;
+            retryCount = 0;
+            
+            // 🔒 RESET INSTANCE GUARD
+            // Questo permette una nuova inizializzazione pulita dopo la cleanup
+            heroGridInitialized = false;
+            
+            console.log('✅ Hero grid cleanup completato');
+        };
+        
+        console.log('✅ Hero Grid Canvas inizializzazione completata');
     }
     
 });
