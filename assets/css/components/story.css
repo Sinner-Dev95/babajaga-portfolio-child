@@ -1,3 +1,7 @@
+/* ============================================================================
+   STORY SECTION - Chi sono (CSS PULITO - NO ANIMAZIONI)
+   ============================================================================ */
+
 .story-container {
     background-color: var(--bg-accent);
     padding: var(--space-xl) var(--space-md);
@@ -16,10 +20,15 @@
     margin: 0 auto;
 }
 
+/* ============================================================================
+   AVATAR (VISIBILE DI DEFAULT)
+   ============================================================================ */
+
 .story-avatar {
     width: 200px;
     height: 200px;
     flex-shrink: 0;
+    /* NESSUNA OPACITY/TRANSFORM - GSAP gestisce tutto */
 }
 
 .story-avatar-image {
@@ -48,10 +57,14 @@
     border: 3px solid var(--primary-light);
 }
 
-/* CONTENUTO TESTUALE STORY */
+/* ============================================================================
+   CONTENUTO TESTUALE (VISIBILE DI DEFAULT)
+   ============================================================================ */
+
 .story-content {
     text-align: justify;
     max-width: 65ch;
+    /* NESSUNA OPACITY/TRANSFORM - GSAP gestisce tutto */
 }
 
 .story-title {
@@ -74,7 +87,10 @@
     color: var(--text-secondary);
 }
 
-/* SIGNATURE DIGITALE */
+/* ============================================================================
+   SIGNATURE DIGITALE
+   ============================================================================ */
+
 .story-signature {
     margin-top: var(--space-lg);
     text-align: center;
@@ -96,13 +112,39 @@
     transform: scale(1.02);
 }
 
-/* ==================== */
-/* MEDIA QUERIES MOBILE */
-/* ==================== */
-@media (max-width: 480px) {
-       .story {
-        gap: var(--space-sm); /* Ridotto da space-xl a space-md (24px invece di 48px) */
+/* ============================================================================
+   FALLBACK - JavaScript disabilitato
+   ============================================================================ */
+
+.no-js .story-avatar,
+.no-js .story-content {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* ============================================================================
+   ACCESSIBILITY - Rispetta preferenze utente
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .story-avatar,
+    .story-content {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
+}
+
+/* ============================================================================
+   MEDIA QUERIES - Mobile
+   ============================================================================ */
+
+@media (max-width: 480px) {
+    .story {
+        gap: var(--space-sm);
+    }
+    
     .story-avatar {
         width: 150px;
         height: 150px;
@@ -121,9 +163,10 @@
     }
 }
 
-/* ==================== */
-/* MEDIA QUERIES TABLET */
-/* ==================== */
+/* ============================================================================
+   MEDIA QUERIES - Tablet
+   ============================================================================ */
+
 @media (min-width: 768px) {
     .story {
         flex-direction: row;
@@ -131,48 +174,45 @@
         gap: var(--space-xl);
     }
     
-    /* AVATAR TABLET - Più grande e bilanciato */
     .story-avatar {
-        width: 280px;  /* Aumentato da 200px */
-        height: 280px; /* Aumentato da 200px */
-        flex: 0 0 auto; /* Dimensione fissa */
+        width: 280px;
+        height: 280px;
+        flex: 0 0 auto;
     }
     
-    /* CONTENUTO TABLET - Occupa spazio rimanente */
     .story-content {
         text-align: left;
         flex: 1;
-        max-width: none; /* Rimuove il limite 65ch */
+        max-width: none;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 280px; /* Stessa altezza avatar */
+        min-height: 280px;
     }
     
     .story-signature {
         text-align: left;
-        margin-top: auto; /* Spinge la signature in fondo */
+        margin-top: auto;
     }
 }
 
-/* ===================== */
-/* MEDIA QUERIES DESKTOP */
-/* ===================== */
+/* ============================================================================
+   MEDIA QUERIES - Desktop
+   ============================================================================ */
+
 @media (min-width: 1024px) {
     .story {
         gap: var(--space-xl);
-        align-items: center; /* Centra verticalmente */
+        align-items: center;
     }
     
-    /* AVATAR DESKTOP - Ancora più grande */
     .story-avatar {
-        width: 350px;  /* Significativamente più grande */
-        height: 350px; /* Mantiene proporzioni quadrate */
+        width: 350px;
+        height: 350px;
     }
     
-    /* CONTENUTO DESKTOP - Si adatta all'avatar più grande */
     .story-content {
-        min-height: 350px; /* Stessa altezza dell'avatar desktop */
+        min-height: 350px;
     }
     
     .signature-image {
@@ -180,36 +220,37 @@
     }
 }
 
-/* =========================== */
-/* MEDIA QUERIES DESKTOP LARGE */
-/* =========================== */
+/* ============================================================================
+   MEDIA QUERIES - Desktop Large
+   ============================================================================ */
+
 @media (min-width: 1290px) {
     .story {
         gap: var(--space-xl);
     }
     
-    /* AVATAR GRANDE DESKTOP - Massimo impatto visivo */
     .story-avatar {
-        width: 400px;   /* Utilizzo ottimale dello spazio */
-        height: 400px;  /* Bilanciato con il testo */
+        width: 400px;
+        height: 400px;
     }
     
     .story-content {
-        min-height: 400px; /* Allineamento perfetto con avatar */
+        min-height: 400px;
     }
 }
 
-/* ======================= */
-/* MIGLIORIE TIPOGRAFICHE  */
-/* ======================= */
+/* ============================================================================
+   MIGLIORIE TIPOGRAFICHE Desktop
+   ============================================================================ */
+
 @media (min-width: 768px) {
     .story-title {
-        font-size: clamp(1.875rem, 3.25vw, 2.75rem); /* Più impact su desktop */
+        font-size: clamp(1.875rem, 3.25vw, 2.75rem);
         margin-bottom: var(--space-lg);
     }
     
     .story-para {
-        font-size: clamp(1.125rem, 1.75vw, 1.375rem); /* Leggermente più grande */
-        line-height: 1.7; /* Migliore leggibilità su schermi grandi */
+        font-size: clamp(1.125rem, 1.75vw, 1.375rem);
+        line-height: 1.7;
     }
 }

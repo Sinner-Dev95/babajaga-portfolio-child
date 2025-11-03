@@ -463,3 +463,52 @@
     transform: none; /* Disable lift su touch */
   }
 }
+
+
+/* ============================================================================
+   HERO ANIMATIONS - Setup iniziale per GSAP
+   Gli elementi partono nascosti, GSAP li anima in sequenza
+   ============================================================================ */
+
+/* Setup posizioni iniziali per animazioni GSAP */
+.hero-title {
+    /* GSAP animerà questo da opacity: 0, y: 30px */
+    transform: translateY(30px);
+}
+
+.hero-payoff {
+    /* GSAP animerà questo da opacity: 0, y: 30px */
+    transform: translateY(30px);
+}
+
+.hero-button {
+    /* GSAP animerà questo da opacity: 0, scale: 0.9 */
+    transform: scale(0.9);
+}
+
+.hero-media {
+    /* GSAP animerà questo da opacity: 0, x: 50px */
+    transform: translateX(50px);
+}
+
+/* FALLBACK - Se JavaScript disabilitato, mostra tutto normalmente */
+.no-js .hero-title,
+.no-js .hero-payoff,
+.no-js .hero-button,
+.no-js .hero-media {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* ACCESSIBILITY - Rispetta preferenze utente */
+@media (prefers-reduced-motion: reduce) {
+    .hero-title,
+    .hero-payoff,
+    .hero-button,
+    .hero-media {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
