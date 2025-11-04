@@ -102,17 +102,17 @@
   opacity: 0.95;
 }
 
-/* === BOTTONE RESPONSIVE - NUOVO HOVER EFFECT === */
+/* === BOTTONE RESPONSIVE - 🆕 FIX PERFORMANCE + TYPO === */
 .hero-button a {
   /* TIPOGRAFIA FLUIDA */
-  font-size: clamp(1,125rem, 1.5vw, 1.3rem);
+  font-size: clamp(1.125rem, 1.5vw, 1.3rem); /* ✅ FIX: Punto decimale invece di virgola */
   font-weight: 600;
   letter-spacing: 0.01em;
   
   /* COLORI VARIABILI */
   color: var(--gray-900);
   background: linear-gradient(135deg, var(--white) 0%, #f8fafc 100%);
-  border: 2px solid var(--button-hover); /* Usiamo la nuova variabile */
+  border: 2px solid var(--button-hover); /* ✅ VARIABILE ESISTE in variables.css */
   
   /* LAYOUT RESPONSIVE */
   border-radius: var(--radius-md);
@@ -125,8 +125,14 @@
   justify-content: center;
   gap: 0.5rem;
   
-  /* TRANSIZIONI PREMIUM */
-  transition: all var(--transition-normal);
+  /* 🆕 FIX: Sostituito transition: all con proprietà specifiche */
+  transition: 
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal),
+    transform var(--transition-fast);
+  
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   
   /* POSITION PER PSEUDO-ELEMENTS */
@@ -163,7 +169,7 @@
 .hero-button a:hover {
   background: var(--success); /* Teal professionale */
   color: var(--white);
-  border-color: var(--button-hover);
+  border-color: var(--button-hover); /* ✅ VARIABILE DEFINITA */
   
   transform: translateY(-3px);
   box-shadow: 
@@ -183,7 +189,7 @@
 
 /* === FOCUS STATE - Accessibilità === */
 .hero-button a:focus-visible {
-  outline: 2px solid var(--button-hover); /* Teal focus */
+  outline: 2px solid var(--button-hover); /* ✅ VARIABILE DEFINITA */
   outline-offset: 4px;
   box-shadow: 
     0 0 0 4px rgba(8, 145, 178, 0.3),
@@ -387,6 +393,121 @@
     flex: 0 0 45%;
     max-width: 600px;
   }
+}
+
+/* === 🆕 BREAKPOINT: 1024px-1440px - LAPTOP PICCOLI === */
+/* FIX PER PROBLEMI LAYOUT SU 1366x768px */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  
+  /* HERO SECTION - Riduci altezza e spacing */
+  .hero-section-container {
+    min-height: 70vh; /* Era 80vh - ora più compatto */
+    padding: var(--space-xl) var(--space-lg); /* Aumenta padding laterale */
+  }
+  
+  .hero-section {
+    gap: var(--space-lg); /* Era var(--space-xl) */
+    max-width: 1100px; /* Era var(--container-max-width) - più compatto */
+    padding: 0 var(--space-sm); /* Piccolo padding laterale */
+  }
+  
+  /* CONTENUTO HERO - Meglio bilanciato */
+  .hero-content {
+    max-width: 55ch; /* Era 65ch - più compatto */
+    gap: var(--space-sm); /* Era var(--space-md) - meno spazio */
+  }
+  
+  .hero-title {
+    font-size: clamp(1.75rem, 4.5vw, 2.75rem); /* Meno aggressivo */
+    max-width: 14ch; /* Era 16ch - riduci per laptop piccoli */
+    line-height: 1.05; /* Era 1.1 - più compatto */
+  }
+  
+  .hero-payoff {
+    max-width: 45ch; /* Era 50ch - meglio proporzione */
+    font-size: clamp(0.9375rem, 2.2vw, 1.125rem); /* Più leggibile */
+    line-height: 1.4; /* Era 1.5 - più compatto */
+    margin-bottom: var(--space-md); /* Era var(--space-lg) - meno spazio */
+  }
+  
+  .hero-button a {
+    max-width: 280px; /* Riduci larghezza max per laptop */
+    font-size: clamp(1rem, 1.4vw, 1.125rem); /* Più bilanciato */
+  }
+  
+  /* MEDIA HERO - Riduci dimensione immagine */
+  .hero-media {
+    max-width: 450px; /* Era 600px */
+    flex: 0 0 40%; /* Era 45% - riduci dominance */
+  }
+  
+  .hero-image {
+    max-width: 400px; /* Era 600px */
+  }
+  
+  /* OTTIMIZZAZIONI GLOBALI PER LAPTOP PICCOLI */
+  
+  /* Fix altre sezioni se presenti */
+  .progetti-home-container,
+  .story-container,
+  .news-slider-container {
+    padding: var(--space-xl) var(--space-lg); /* Era var(--space-md) */
+  }
+  
+  .progetti-home-wrapper,
+  .story,
+  .news-slider-wrapper {
+    max-width: 1100px; /* Era var(--container-max-width) */
+    padding: 0 var(--space-sm);
+  }
+  
+  /* Progetti - Fix immagini sproporzionate */
+  .progetto-home-media {
+    aspect-ratio: 16 / 12; /* Più compatto */
+    overflow: hidden;
+    border-radius: var(--radius-md);
+  }
+  
+  .progetto-home-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* IMPORTANTE: non stretched! */
+  }
+  
+  .progetto-home-number {
+    font-size: clamp(2rem, 4vw, 2.5rem); /* Era 4rem - troppo grande */
+  }
+  
+  .progetto-home-item {
+    grid-template-columns: 1fr 1.1fr; /* Riduci immagine, aumenta testo */
+  }
+  
+  .progetto-home-item.reverse {
+    grid-template-columns: 1.1fr 1fr; /* Inverti per coerenza */
+  }
+  
+  /* News - Assicura visibilità header */
+  .news-archive-header {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg) var(--space-sm);
+    background: var(--white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+  }
+  
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colonne invece di 3 */
+    gap: var(--space-lg);
+  }
+}
+
+/* === BREAKPOINT: 1440px+ - DESKTOP LARGE === */
+@media (min-width: 1440px) {
+  /* Resta tutto normale - breakpoint desktop standard già ottimo */
 }
 
 /* === FALLBACK: ALTEZZA RIDOTTA + LARGHEZZA PICCOLA === */

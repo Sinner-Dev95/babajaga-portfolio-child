@@ -1,6 +1,7 @@
 /* ============================================================================
    PROGETTI HOME - Layout alternato portfolio premium
    Diverso da news (slider) - stile alternato sx/dx
+   Versione ottimizzata per laptop piccoli (1366px) con spacing armonioso
    ============================================================================ */
 
 /* === CONTAINER PRINCIPALE === */
@@ -91,7 +92,7 @@
 }
 
 /* ============================================================================
-   IMMAGINE PROGETTO
+   IMMAGINE PROGETTO - 🆕 DIMENSIONI AUMENTATE + FIX REVERSE
    ============================================================================ */
 
 .progetto-home-media {
@@ -99,15 +100,17 @@
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--gray-200);
+    border-radius: var(--radius-md);
 }
 
 .progetto-home-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Default: cover per desktop */
     transition: transform var(--transition-normal);
 }
 
+/* 🆕 HOVER IMMAGINE - Zoom controllato */
 .progetto-home-item:hover .progetto-home-img {
     transform: scale(1.05);
 }
@@ -124,7 +127,7 @@
 }
 
 /* ============================================================================
-   CONTENUTO PROGETTO
+   CONTENUTO PROGETTO - 🆕 SPACING ARMONIOSO + FIX PADDING REVERSE
    ============================================================================ */
 
 .progetto-home-content {
@@ -134,13 +137,14 @@
     gap: var(--space-md);
 }
 
-/* Numero progetto - Accent */
+/* 🆕 Numero progetto - DIMENSIONE RIDOTTA */
 .progetto-home-number {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.5rem, 5vw, 3rem); /* Era 4rem - troppi spazio */
     font-weight: var(--font-weight-bold);
     color: var(--primary);
     line-height: 1;
     opacity: 0.3;
+    margin-bottom: var(--space-sm); /* Spazio ridotto */
 }
 
 /* Titolo progetto */
@@ -148,17 +152,7 @@
     font-size: clamp(1.375rem, 2.5vw, 1.875rem);
     font-weight: var(--font-weight-bold);
     line-height: 1.2;
-    margin: 0;
-}
-
-.progetto-home-title-item a {
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.progetto-home-title-item a:hover {
-    color: var(--primary);
+    margin: 0 0 var(--space-sm) 0; /* Spazio coerente con spacing system */
 }
 
 /* Descrizione */
@@ -166,7 +160,7 @@
     font-size: clamp(1rem, 1.5vw, 1.125rem);
     line-height: 1.6;
     color: var(--text-secondary);
-    margin: 0;
+    margin: 0 0 var(--space-md) 0; /* Spazio armonioso tra sezioni */
 }
 
 /* Tecnologie badge */
@@ -174,7 +168,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-xs);
-    margin-top: var(--space-sm);
+    margin: 0 0 var(--space-sm) 0; /* Spazio armonioso */
 }
 
 .tech-tag {
@@ -204,7 +198,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    margin-top: var(--space-md);
+    margin: var(--space-sm) 0 0 0; /* Spazio armonioso con padding sistem */
     transition: all var(--transition-fast);
 }
 
@@ -264,8 +258,24 @@
 }
 
 /* ============================================================================
-   MEDIA QUERIES - Responsive
+   MEDIA QUERIES - Mobile First Approach
    ============================================================================ */
+
+/* === MOBILE PICCOLO === */
+@media (max-width: 480px) {
+    .progetti-home-container {
+        padding: var(--space-lg) var(--space-sm);
+    }
+    
+    .progetto-home-content {
+        padding: var(--space-lg); /* Spacing coerente per mobile */
+    }
+    
+    /* Mobile - aspect ratio più compatto */
+    .progetto-home-media {
+        aspect-ratio: 16 / 9; /* Più compatto su mobile */
+    }
+}
 
 /* === TABLET 768px+ === */
 @media (min-width: 768px) {
@@ -287,13 +297,24 @@
         gap: var(--space-xl);
     }
     
-    /* Item con classe .reverse: inverte ordine */
+    /* 🆕 FIX CARD REVERSE - ALLINEAMENTO IMMAGINE + PADDING ARMONIOSO */
     .progetto-home-item.reverse .progetto-home-media {
         order: 2;
+        margin-right: 0; /* Assicura allineamento al bordo */
+        padding-right: 0; /* Nessun padding che interferisce */
     }
     
     .progetto-home-item.reverse .progetto-home-content {
         order: 1;
+        margin-left: 0; /* Assicura allineamento al bordo */
+        padding-left: 0; /* Nessun padding che interferisce */
+        /* 🆕 PADDING ARMONIOSO - ERGONOMIA PER CONTENUTO TESTUALE */
+        padding: var(--space-lg); /* Ridotto per mantenere armonia */
+    }
+    
+    /* Tablet - aspect ratio bilanciato */
+    .progetto-home-media {
+        aspect-ratio: 16 / 10;
     }
 }
 
@@ -312,13 +333,212 @@
     }
 }
 
-/* === MOBILE PICCOLO === */
-@media (max-width: 480px) {
+/* === 🆕 BREAKPOINT: 1024px-1440px - LAPTOP PICCOLI === */
+/* FIX SPECIFICO PER PROBLEMI 1366x768px + IMMAGINI PIÙ GRANDI + PADDING PERFETTI */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    
+    /* CONTAINER - Più compatto per laptop piccoli */
     .progetti-home-container {
-        padding: var(--space-lg) var(--space-sm);
+        padding: var(--space-xl) var(--space-lg); /* Aumenta padding laterale */
     }
     
-    .progetto-home-content {
-        padding: var(--space-lg) var(--space-sm);
+    .progetti-home-wrapper {
+        max-width: 1100px; /* Era var(--container-max-width) */
+        padding: 0 var(--space-sm);
+    }
+    
+    /* GRID - Meglio bilanciata */
+    .progetti-home-grid {
+        gap: var(--space-xl); /* Era calc(var(--space-xl) * 1.5) */
+    }
+    
+    .progetti-home-header {
+        margin-bottom: var(--space-lg); /* Era var(--space-xl) */
+        text-align: center;
+    }
+    
+    .progetti-home-footer {
+        margin-top: var(--space-lg); /* Era var(--space-xl) */
+    }
+    
+    /* 🆕 ITEM PROGETTO - CONSTRAINT IMMAGINI + DIMENSIONI AUMENTATE */
+    .progetto-home-item {
+        grid-template-columns: 1fr 1.1fr; /* Riduci immagine, aumenta testo */
+    }
+    
+    .progetto-home-item.reverse {
+        grid-template-columns: 1.1fr 1fr; /* Inverti per coerenza */
+    }
+    
+    /* 🆕 IMMAGINE - DIMENSIONI AUMENTATE + FIX REVERSE */
+    .progetto-home-media {
+        aspect-ratio: 16 / 11; /* Più alta di 16/12 (più grande) */
+        max-height: 300px; /* Aumento da 250px a 300px */
+        min-height: 280px; /* Altezza minima per consistenza */
+        overflow: hidden;
+        background: var(--gray-100);
+        border-radius: var(--radius-md);
+        /* 🆕 FIX REVERSE - MARGIN E PADDING NULLI */
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .progetto-home-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Cambia da contain a cover per fill completo */
+        transition: transform var(--transition-normal);
+        /* 🆕 ASSICURA CHE L'IMMAGINE RIEMPIA TUTTO */
+        object-position: center center;
+    }
+    
+    /* 🆕 CARD REVERSE - SPECIFICO PER ALLINEAMENTO BORDO DESTRO */
+    .progetto-home-item.reverse .progetto-home-media {
+        order: 2;
+        /* Assicura che sia perfettamente allineata al bordo destro */
+        justify-self: end; /* Allinea la griglia al bordo destro */
+        width: 100%; /* Assicura larghezza completa */
+        margin-right: 0;
+        padding-right: 0;
+    }
+    
+    .progetto-home-item.reverse .progetto-home-content {
+        order: 1;
+        /* Assicura che sia perfettamente allineata al bordo sinistro */
+        justify-self: start; /* Allinea la griglia al bordo sinistro */
+        width: 100%;
+        margin-left: 0;
+        padding-left: 0;
+        
+        /* 🆕 PADDING ARMONIOSO PER SECONDA CARD - DESIGN SYSTEM CONSISTENT */
+        padding: var(--space-lg); /* Coerente con variables.css - 32px */
+        gap: var(--space-sm);     /* 16px - spazi tra elementi contenuto */
+    }
+    
+    /* Zoom controllato per laptop */
+    .progetto-home-item:hover .progetto-home-img {
+        transform: scale(1.05); /* Rimetti zoom normale */
+    }
+    
+    /* 🆕 NUMERO PROGETTO - DIMENSIONE RIDOTTA PER LAPTOP */
+    .progetto-home-number {
+        font-size: clamp(2rem, 4vw, 2.5rem); /* Era 4rem - troppi spazio */
+        margin-bottom: var(--space-sm); /* Spazio ridotto */
+        opacity: 0.25; /* Ancora più sottile */
+    }
+    
+    /* 🆕 TITOLO PROGETTO - SPACING ARMONIOSO */
+    .progetto-home-title-item {
+        margin: 0 0 var(--space-xs) 0; /* Micro spacing per coerenza */
+    }
+    
+    /* 🆕 DESCRIZIONE - PADDING/MARGIN CONSISTENT */
+    .progetto-home-excerpt {
+        line-height: 1.5; /* Era 1.6 - più compatto */
+        margin: 0 0 var(--space-sm) 0; /* Spazio armonioso */
+    }
+    
+    /* 🆕 TECNOLOGIE - GAP COERENTE CON DESIGN SYSTEM */
+    .progetto-home-tech {
+        gap: var(--space-xs); /* 8px - micro spacing */
+        margin: 0 0 var(--space-xs) 0; /* Micro spacing prima del link */
+    }
+    
+    /* Badges tecnologie - DIMENSIONI OTTIMIZZATE */
+    .tech-tag {
+        font-size: 0.8125rem; /* Era clamp - fisso più piccolo */
+        padding: 0.375rem 0.75rem; /* Coerente con var(--space-xs) var(--space-sm) */
+    }
+    
+    /* 🆕 LINK PROGETTO - POSIZIONAMENTO ARMONIOSO */
+    .progetto-home-link {
+        font-size: 1rem; /* Era clamp - più bilanciato */
+        margin: var(--space-sm) 0 0 0; /* Spazio armonioso dal contenuto sopra */
+    }
+    
+    /* 🆕 CONTENUTO PRIMA CARD - PADDING IDENTICO PER COERENZA */
+    .progetto-home-item:not(.reverse) .progetto-home-content {
+        padding: var(--space-lg); /* Stesso padding per armonia */
+        gap: var(--space-sm);     /* Stesso gap per consistenza */
+    }
+    
+    /* HEADER RESPONSIVE per laptop piccoli */
+    .progetti-home-title {
+        font-size: clamp(1.625rem, 3.5vw, 2.125rem); /* Più bilanciato */
+    }
+    
+    .progetti-home-subtitle {
+        font-size: clamp(0.9375rem, 1.75vw, 1.125rem); /* Più leggibile */
+        max-width: 55ch; /* Era 65ch - più compatto */
+    }
+}
+
+/* === DESKTOP 1440px+ === */
+@media (min-width: 1440px) {
+    /* Desktop large - aspect ratio più alto per immagini */
+    .progetto-home-media {
+        aspect-ratio: 16 / 10;
+    }
+    
+    .progetti-home-grid {
+        gap: calc(var(--space-xl) * 1.5);
+    }
+}
+
+/* === FALLBACK per browser senza aspect-ratio === */
+@supports not (aspect-ratio: 16 / 10) {
+    .progetto-home-media {
+        height: 0;
+        padding-bottom: 62.5%; /* 16:10 aspect ratio */
+        position: relative;
+    }
+    
+    .progetto-home-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+/* === ACCESSIBILITÀ === */
+@media (prefers-reduced-motion: reduce) {
+    .progetto-home-item {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+    
+    .tech-tag:hover,
+    .progetto-home-link:hover {
+        transform: none;
+    }
+    
+    .progetto-home-img {
+        transition: none;
+    }
+    
+    .progetto-home-item:hover .progetto-home-img {
+        transform: none;
+    }
+}
+
+/* === TOUCH DEVICES === */
+@media (hover: none) and (pointer: coarse) {
+    .progetto-home-img {
+        transition: none;
+    }
+    
+    .progetto-home-item:hover .progetto-home-img {
+        transform: none;
+    }
+    
+    .tech-tag:hover {
+        transform: none;
+    }
+    
+    .progetto-home-link:hover {
+        transform: none;
     }
 }

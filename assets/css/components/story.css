@@ -1,5 +1,7 @@
 /* ============================================================================
-   STORY SECTION - Chi sono (CSS PULITO - NO ANIMAZIONI)
+   STORY SECTION - Chi sono
+   ✅ FIX: Bug animazioni GSAP risolto
+   ✅ FIX: Layout 1366px ottimizzato e bilanciato
    ============================================================================ */
 
 .story-container {
@@ -21,14 +23,18 @@
 }
 
 /* ============================================================================
-   AVATAR (VISIBILE DI DEFAULT)
+   AVATAR - 🔧 FIX: Rimuovi opacity/transform iniziali
+   GSAP gestisce completamente l'animazione (fromTo)
    ============================================================================ */
 
 .story-avatar {
     width: 200px;
     height: 200px;
     flex-shrink: 0;
-    /* NESSUNA OPACITY/TRANSFORM - GSAP gestisce tutto */
+    
+    /* 🔧 FIX: Rimosso opacity: 0 e transform iniziali
+       GSAP usa fromTo() quindi gestisce tutto via JS
+       CSS non deve interferire con stato iniziale */
 }
 
 .story-avatar-image {
@@ -38,11 +44,10 @@
     object-fit: cover;
     border: 3px solid var(--primary-light);
     box-shadow: var(--shadow-md);
-    transition: all var(--transition-normal);
+    transition: box-shadow var(--transition-normal);
 }
 
 .story-avatar-image:hover {
-    transform: scale(1.05);
     box-shadow: var(--shadow-lg);
 }
 
@@ -58,13 +63,15 @@
 }
 
 /* ============================================================================
-   CONTENUTO TESTUALE (VISIBILE DI DEFAULT)
+   CONTENUTO TESTUALE - 🔧 FIX: Rimuovi opacity/transform iniziali
    ============================================================================ */
 
 .story-content {
     text-align: justify;
     max-width: 65ch;
-    /* NESSUNA OPACITY/TRANSFORM - GSAP gestisce tutto */
+    
+    /* 🔧 FIX: Rimosso opacity: 0 e transform iniziali
+       GSAP gestisce via fromTo() */
 }
 
 .story-title {
@@ -88,12 +95,15 @@
 }
 
 /* ============================================================================
-   SIGNATURE DIGITALE
+   SIGNATURE DIGITALE - 🔧 FIX: Rimuovi opacity/transform iniziali
    ============================================================================ */
 
 .story-signature {
     margin-top: var(--space-lg);
     text-align: center;
+    
+    /* 🔧 FIX: Rimosso opacity: 0 e transform iniziali
+       GSAP gestisce animazione separata se necessario */
 }
 
 .signature-image {
@@ -101,7 +111,7 @@
     height: auto;
     opacity: 0.9;
     filter: brightness(0.8);
-    transition: all var(--transition-normal);
+    transition: filter var(--transition-normal);
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
@@ -109,31 +119,34 @@
 .signature-image:hover {
     opacity: 1;
     filter: brightness(1);
-    transform: scale(1.02);
 }
 
 /* ============================================================================
-   FALLBACK - JavaScript disabilitato
-   ============================================================================ */
-
-.no-js .story-avatar,
-.no-js .story-content {
-    opacity: 1 !important;
-    transform: none !important;
-}
-
-/* ============================================================================
-   ACCESSIBILITY - Rispetta preferenze utente
+   ACCESSIBILITÀ - Reduced Motion
+   🔧 FIX: Aggiungi !important per override GSAP inline styles
    ============================================================================ */
 
 @media (prefers-reduced-motion: reduce) {
     .story-avatar,
-    .story-content {
-        animation: none !important;
-        transition: none !important;
-        opacity: 1 !important;
-        transform: none !important;
+    .story-content,
+    .story-signature {
+        opacity: 1 !important; /* ✅ Override GSAP */
+        transform: none !important; /* ✅ Override GSAP */
+        animation: none !important; /* ✅ Previene animazioni CSS */
+        transition: none !important; /* ✅ Disabilita transizioni */
     }
+}
+
+/* ============================================================================
+   FALLBACK - JavaScript Disabilitato
+   🔧 FIX: Garantisce visibilità se GSAP non carica
+   ============================================================================ */
+
+.no-js .story-avatar,
+.no-js .story-content,
+.no-js .story-signature {
+    opacity: 1 !important;
+    transform: none !important;
 }
 
 /* ============================================================================
@@ -142,7 +155,7 @@
 
 @media (max-width: 480px) {
     .story {
-        gap: var(--space-sm);
+        gap: var(--space-lg);
     }
     
     .story-avatar {
@@ -194,6 +207,16 @@
         text-align: left;
         margin-top: auto;
     }
+    
+    .story-title {
+        font-size: clamp(1.875rem, 3.25vw, 2.75rem);
+        margin-bottom: var(--space-lg);
+    }
+    
+    .story-para {
+        font-size: clamp(1.125rem, 1.75vw, 1.375rem);
+        line-height: 1.7;
+    }
 }
 
 /* ============================================================================
@@ -240,17 +263,80 @@
 }
 
 /* ============================================================================
-   MIGLIORIE TIPOGRAFICHE Desktop
+   🆕 BREAKPOINT: 1024px-1440px - LAPTOP PICCOLI (1366px)
+   ✅ FIX: Layout bilanciato e leggibile
    ============================================================================ */
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) and (max-width: 1440px) {
+    
+    /* === CONTAINER === */
+    .story-container {
+        padding: var(--space-xl) var(--space-lg);
+    }
+    
+    .story {
+        max-width: 1100px; /* Ridotto da 1290px per laptop piccoli */
+        padding: 0 var(--space-md);
+        gap: var(--space-xl); /* ✅ Mantiene respiro (era var(--space-lg) - troppo stretto) */
+        align-items: center; /* ✅ Centrato verticalmente */
+    }
+    
+    /* === AVATAR === */
+    .story-avatar {
+        width: 280px; /* ✅ Ridotto da 350px ma non troppo (320px era squilibrato) */
+        height: 280px;
+        flex: 0 0 auto;
+    }
+    
+    /* === CONTENUTO === */
+    .story-content {
+        min-height: 280px; /* Coerente con avatar */
+        max-width: 55ch; /* ✅ Equilibrio tra 50ch (troppo stretto) e 65ch (troppo largo) */
+        gap: var(--space-md); /* Spacing paragrafi */
+        justify-content: flex-start; /* ✅ Allinea contenuto in alto */
+    }
+    
+    /* === TYPOGRAPHY === */
     .story-title {
-        font-size: clamp(1.875rem, 3.25vw, 2.75rem);
-        margin-bottom: var(--space-lg);
+        font-size: clamp(1.75rem, 3.2vw, 2.375rem); /* ✅ Leggibile ma non gigante */
+        margin-bottom: var(--space-md); /* Respiro dopo titolo */
+        line-height: 1.2; /* ✅ Mantiene line-height standard */
     }
     
     .story-para {
-        font-size: clamp(1.125rem, 1.75vw, 1.375rem);
-        line-height: 1.7;
+        font-size: clamp(1.0625rem, 1.5vw, 1.1875rem); /* ✅ Leggibile (era 1rem - troppo piccolo) */
+        line-height: 1.6; /* ✅ Mantiene leggibilità (era 1.5 - troppo compatto) */
+    }
+    
+    /* === TEXT SPACING === */
+    .story-text {
+        gap: var(--space-md); /* ✅ Respiro tra paragrafi (era sm - troppo compatto) */
+        flex: 1;
+    }
+    
+    /* === SIGNATURE === */
+    .story-signature {
+        margin-top: var(--space-lg); /* ✅ Respiro prima firma */
+        text-align: center; /* Centrata */
+        align-self: center; /* ✅ Allineamento centrale */
+    }
+    
+    .signature-image {
+        max-width: 180px; /* ✅ Proporzionato (era 160px - troppo piccolo) */
     }
 }
+
+/* ============================================================================
+   🔧 DEBUG: Se animazioni ancora non funzionano
+   Attiva temporaneamente per test (poi rimuovi)
+   ============================================================================ */
+
+/*
+.story-avatar,
+.story-content,
+.story-signature {
+    outline: 2px solid red !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+*/

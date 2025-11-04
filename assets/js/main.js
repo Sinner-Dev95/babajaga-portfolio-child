@@ -25,13 +25,21 @@ document.addEventListener('DOMContentLoaded', function() {
     initAllAnimations();
     
     // =========================================================================
-    // GESTIONE EVENTI NAVIGAZIONE SPA
+    // GESTIONE EVENTI NAVIGAZIONE SPA - 🆕 FIX DOUBLE LISTENER
     // =========================================================================
     
+    // 🔧 FIX: Un solo registro pagehide globale (non dentro le funzioni)
     window.addEventListener('pagehide', function() {
-        console.log('🧹 Pagina nascosta, cleanup hero grid...');
+        console.log('🧹 Pagina nascosta, cleanup completo...');
+        
+        // Cleanup Hero Grid Canvas
         if (window.heroCanvasCleanup) {
             window.heroCanvasCleanup();
+        }
+        
+        // 🆕 FIX: Cleanup GSAP animations (memory leak prevention)
+        if (typeof window.portfolioAnimationsCleanup === 'function') {
+            window.portfolioAnimationsCleanup();
         }
     });
     
@@ -191,87 +199,77 @@ document.addEventListener('DOMContentLoaded', function() {
         // 3. STORY - Fade Laterale Sincrono (SOLO ScrollTrigger)
         // =====================================================================
         
-     // =====================================================================
-// 3. STORY - Fade Laterale Sincrono (CON DEBUG)
-// =====================================================================
-// =====================================================================
-// 3. STORY - Fade Laterale Sincrono (SOLUZIONE AFFIDABILE)
-// =====================================================================
-
-// =====================================================================
-// 3. STORY - Fade Laterale Sincrono (SOLO SCROLLTRIGGER)
-// =====================================================================
-
-if (typeof ScrollTrigger !== 'undefined' && document.querySelector('.story-container')) {
-    
-    console.log('🎨 Configurazione Story animations...');
-    
-    // DEBUG: Verifica che gli elementi esistano
-    console.log('🔍 Story elements:', {
-        avatar: document.querySelector('.story-avatar'),
-        content: document.querySelector('.story-content'),
-        container: document.querySelector('.story-container')
-    });
-    
-    // Avatar da sinistra - CON SCROLLTRIGGER ROBUSTO
-    gsap.fromTo('.story-avatar', 
-        {
-            opacity: 0,
-            x: -50
-        },
-        {
-            opacity: 1,
-            x: 0,
-            duration: 0.8 * speedMultiplier,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '.story-container',
-                start: 'top 85%', // Più in basso per essere sicuri
-                end: 'bottom 15%',
-                toggleActions: 'play none none none',
-                markers: false, // Disattiva dopo il test
-                onEnter: () => console.log('🎯 Story avatar ENTERED'),
-                onLeave: () => console.log('🎯 Story avatar LEFT'),
-                onEnterBack: () => console.log('🎯 Story avatar ENTER BACK'),
-                onLeaveBack: () => console.log('🎯 Story avatar LEAVE BACK')
-            }
+        if (typeof ScrollTrigger !== 'undefined' && document.querySelector('.story-container')) {
+            
+            console.log('🎨 Configurazione Story animations...');
+            
+            // DEBUG: Verifica che gli elementi esistano
+            console.log('🔍 Story elements:', {
+                avatar: document.querySelector('.story-avatar'),
+                content: document.querySelector('.story-content'),
+                container: document.querySelector('.story-container')
+            });
+            
+            // Avatar da sinistra - CON SCROLLTRIGGER ROBUSTO
+            gsap.fromTo('.story-avatar', 
+                {
+                    opacity: 0,
+                    x: -50
+                },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8 * speedMultiplier,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.story-container',
+                        start: 'top 85%', // Più in basso per essere sicuri
+                        end: 'bottom 15%',
+                        toggleActions: 'play none none none',
+                        markers: false, // Disattiva dopo il test
+                        onEnter: () => console.log('🎯 Story avatar ENTERED'),
+                        onLeave: () => console.log('🎯 Story avatar LEFT'),
+                        onEnterBack: () => console.log('🎯 Story avatar ENTER BACK'),
+                        onLeaveBack: () => console.log('🎯 Story avatar LEAVE BACK')
+                    }
+                }
+            );
+            
+            // Contenuto da destra - CON SCROLLTRIGGER ROBUSTO
+            gsap.fromTo('.story-content', 
+                {
+                    opacity: 0,
+                    x: 50
+                },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8 * speedMultiplier,
+                    delay: 0.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: '.story-container',
+                        start: 'top 85%', // Più in basso per essere sicuri
+                        end: 'bottom 15%',
+                        toggleActions: 'play none none none',
+                        markers: false, // Disattiva dopo il test
+                        onEnter: () => console.log('🎯 Story content ENTERED'),
+                        onLeave: () => console.log('🎯 Story content LEFT')
+                    }
+                }
+            );
+            
+            console.log('✅ Story ScrollTrigger animations configurate');
         }
-    );
-    
-    // Contenuto da destra - CON SCROLLTRIGGER ROBUSTO
-    gsap.fromTo('.story-content', 
-        {
-            opacity: 0,
-            x: 50
-        },
-        {
-            opacity: 1,
-            x: 0,
-            duration: 0.8 * speedMultiplier,
-            delay: 0.2,
-            ease: 'power2.out',
-            scrollTrigger: {
-                trigger: '.story-container',
-                start: 'top 85%', // Più in basso per essere sicuri
-                end: 'bottom 15%',
-                toggleActions: 'play none none none',
-                markers: false, // Disattiva dopo il test
-                onEnter: () => console.log('🎯 Story content ENTERED'),
-                onLeave: () => console.log('🎯 Story content LEFT')
+        
+        // FORZA REFRESH SCROLLTRIGGER DOPO IL CARICAMENTO
+        setTimeout(() => {
+            if (typeof ScrollTrigger !== 'undefined') {
+                ScrollTrigger.refresh();
+                console.log('🔄 ScrollTrigger refresh forzato');
             }
-        }
-    );
-    
-    console.log('✅ Story ScrollTrigger animations configurate');
-}
-
-// FORZA REFRESH SCROLLTRIGGER DOPO IL CARICAMENTO
-setTimeout(() => {
-    if (typeof ScrollTrigger !== 'undefined') {
-        ScrollTrigger.refresh();
-        console.log('🔄 ScrollTrigger refresh forzato');
-    }
-}, 500);
+        }, 500);
+        
         // =====================================================================
         // 4. NEWS SLIDER - Solo Header
         // =====================================================================
@@ -295,6 +293,35 @@ setTimeout(() => {
             
             console.log('✅ News animations configurate');
         }
+        
+        // =========================================================================
+        // CLEANUP FUNCTION - 🆕 FIX MEMORY LEAK
+        // =========================================================================
+        
+        // 🔧 FIX: Non registrare più event listener qui (già registrato globalmente)
+        window.portfolioAnimationsCleanup = function() {
+            console.log('🧹 Cleaning up GSAP animations...');
+            
+            // Kill all ScrollTrigger instances
+            if (typeof ScrollTrigger !== 'undefined') {
+                const triggers = ScrollTrigger.getAll();
+                triggers.forEach((trigger, index) => {
+                    console.log(`🗑️ Killing trigger ${index + 1}/${triggers.length}:`, 
+                               trigger.vars.id || 'unnamed');
+                    trigger.kill();
+                });
+                console.log(`✅ ScrollTrigger cleanup: ${triggers.length} triggers killed`);
+            }
+            
+            // Kill all active GSAP tweens
+            gsap.killTweensOf('*');
+            console.log('✅ GSAP tweens cleanup completed');
+            
+            // Reset global variables
+            heroGridInitialized = false;
+            
+            console.log('✅ Portfolio animations cleanup completed');
+        };
         
         console.log('🎉 Tutte le animazioni configurate con successo!');
     }
@@ -382,7 +409,7 @@ setTimeout(() => {
     }
     
     // =========================================================================
-    // HERO GRID CANVAS
+    // HERO GRID CANVAS - 🆕 FIX RACE CONDITION
     // =========================================================================
     
     function initHeroGridCanvas() {
@@ -444,6 +471,7 @@ setTimeout(() => {
         let retryCount = 0;
         const maxRetries = 10;
         
+        // 🆕 FIX: Canvas Resize Race Condition - Versione migliorata
         function resizeCanvas() {
             const rect = container.getBoundingClientRect();
             let width = rect.width;
@@ -451,6 +479,10 @@ setTimeout(() => {
             
             if (width === 0 || height === 0) {
                 console.log('⚠️ getBoundingClientRect() ritorna zero, fallback a offsetWidth/Height');
+                
+                // 🆕 FIX: Forza reflow del browser prima del fallback
+                void container.offsetHeight; // Trigger layout recalculation
+                
                 width = container.offsetWidth;
                 height = container.offsetHeight;
             }
@@ -468,13 +500,29 @@ setTimeout(() => {
             
             if (width > 0 && height > 0) {
                 createGrid();
+                retryCount = 0; // 🆕 FIX: Reset counter on success
             } else {
                 retryCount++;
                 if (retryCount < maxRetries) {
-                    console.log(`⏳ Retry attempt ${retryCount + 1} in 50ms...`);
-                    setTimeout(resizeCanvas, 50);
+                    console.log(`⏳ Retry attempt ${retryCount + 1} in 150ms...`); // 🆕 FIX: Increased to 150ms
+                    
+                    // 🆕 FIX: Force reflow before retry
+                    void container.offsetHeight;
+                    
+                    setTimeout(resizeCanvas, 150); // 🆕 FIX: Increased timeout for Safari/iOS
                 } else {
-                    console.error('❌ Failed to get canvas dimensions after all retries');
+                    console.error('❌ Failed to get canvas dimensions after', maxRetries, 'retries');
+                    console.error('📊 Debug info:', {
+                        containerExists: !!container,
+                        containerDisplay: window.getComputedStyle(container).display,
+                        containerVisibility: window.getComputedStyle(container).visibility,
+                        containerWidth: container.clientWidth,
+                        containerHeight: container.clientHeight
+                    });
+                    
+                    // Fallback estremo: hide canvas se continua a fallire
+                    canvas.style.display = 'none';
+                    console.log('🛡️ Canvas fallback: hiding element due to repeated failures');
                 }
             }
         }
@@ -610,6 +658,10 @@ setTimeout(() => {
                 console.log('Container:', container);
                 console.log('Dots array length:', dots.length);
                 console.groupEnd();
+                
+                // 🆕 FIX: Fallback - hide canvas se non funziona
+                canvas.style.display = 'none';
+                console.log('🛡️ Canvas timeout fallback: hiding element');
             }
         }, 100);
         
